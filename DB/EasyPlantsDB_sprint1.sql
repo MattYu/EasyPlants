@@ -1,3 +1,10 @@
+-=============================================================================================
+-- Query Description:
+-- Add tables for storing users info, sensor data, sensor pairing.
+-- Howtos: Create exact copies of tables in sqllite for dev purpose, will sync with Azure SQL server later. 
+-=============================================================================================
+
+
 DROPTABLE IF EXISTS users;
 	CREATE TABLE users (
 	  user_id                        INT(32)      NOT NULL AUTO_INCREMENT,
