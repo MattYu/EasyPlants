@@ -10,7 +10,7 @@ Quick reminder:
 - To push code: 
 git add 
 git commit -m #task number brief description
-make a pull request for peer code review. Please do not bypass this step and merge to Master as this will lead to unforseen consequences. 
+## make a pull request for peer code review. Please do not bypass this step and merge to Master as this will lead to unforseen consequences. 
 
 
 # How to connect to Azure db with Android Studio
