@@ -14,4 +14,5 @@ git commit -m #task number brief description
 
 
 # How to connect to Azure db with Android Studio
-Coming soon 
+Coming soon. 
+Please use local sqlite for dev and testing, using tables found in folder db
