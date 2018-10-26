@@ -1,0 +1,114 @@
+Plant Type,Plant Name,Minimum Humidity %,Maximum Humidity %,Mid-Range Humidity %
+Flower,Agave,0,40,20
+Flower,Aster,21,40,31
+Flower,Astilbe,41,60,51
+Flower,Big Blue Stern,21,40,31
+Flower,Bleeding Heart,41,60,51
+Flower,Butterfly Weed,21,40,31
+Flower,Cactus,0,40,20
+Flower,Catmint,21,40,31
+Flower,Christmas Fern,21,40,31
+Flower,Coneflower,21,40,31
+Flower,Daffodil,21,60,41
+Flower,Dalia,21,60,41
+Flower,Daylilly,21,60,41
+Flower,Gaillardia,21,40,31
+Flower,Heathers,21,40,31
+Flower,Hellebores,41,60,51
+Flower,Hosta,21,60,41
+Flower,Hyssop,21,40,31
+Flower,Iris,21,60,41
+Flower,Ironweed,41,60,51
+Flower,Jack In Pulpits,41,60,51
+Flower,Joe-Pye Weed,41,60,51
+Flower,Lavendar,21,40,31
+Flower,Lemon Balm,21,40,31
+Flower,Lily,21,60,41
+Flower,Lobellia,41,80,61
+Flower,Lupine,41,60,51
+Flower,Marigold,21,40,31
+Flower,Marsh Marigold,61,80,71
+Flower,May Apple,41,60,51
+Flower,Meadow Rue,41,80,61
+Flower,Monarda,21,40,31
+Flower,Ornamental Grasses,21,40,31
+Flower,Penstemon,21,40,31
+Flower,Peony,21,60,41
+Flower,Petunia,21,40,31
+Flower,Poppy,21,40,31
+Flower,Purple Coneflower,21,40,31
+Flower,Queen of the Prairie,41,60,51
+Flower,Red Milkweed,41,60,51
+Flower,Sedges,21,80,51
+Flower,Sedum,0,40,20
+Flower,Pansy,21,60,41
+Flower,Tulip,21,60,41
+Flower,Violet,21,60,41
+Flower,Yarrow,0,40,20
+Flower,Yucca,0,40,20
+Flower,Zinnia,21,40,31
+Tree/Shrub,Alpine Current,21,40,31
+Tree/Shrub,American Filbert,21,60,41
+Tree/Shrub,American Holly,21,40,31
+Tree/Shrub,Amur Privet,21,40,31
+Tree/Shrub,Arborvitae,21,40,31
+Tree/Shrub,Azealeas,21,60,41
+Tree/Shrub,Bald Cypress,21,81,51
+Tree/Shrub,Barberry,21,40,31
+Tree/Shrub,Birch,41,60,51
+Tree/Shrub,Black Tupelo,21,40,31
+Tree/Shrub,Chinese Juniper,21,40,31
+Tree/Shrub,Clematis,21,60,41
+Tree/Shrub,Common Boxwood,21,40,31
+Tree/Shrub,Common Elderberry,41,60,51
+Tree/Shrub,Common Lilac,21,40,31
+Tree/Shrub,Crab Apple,21,40,31
+Tree/Shrub,Crape Myrtle,21,60,41
+Tree/Shrub,Dawn Redwood,41,80,61
+Tree/Shrub,Dogwood,41,80,61
+Tree/Shrub,Eastern Red Cedar,21,40,31
+Tree/Shrub,Elderberry,21,80,51
+Tree/Shrub,Elm,21,60,41
+Tree/Shrub,Frazier Fir,21,40,31
+Tree/Shrub,Gardenia,21,40,31
+Tree/Shrub,Ginkgo,21,40,31
+Tree/Shrub,Hawthorn,21,40,31
+Tree/Shrub,Holly,21,40,31
+Tree/Shrub,Honey Locust,21,40,31
+Tree/Shrub,Horse Chestnut,21,40,31
+Tree/Shrub,Hydragea,41,60,51
+Tree/Shrub,Juniper,21,40,31
+Tree/Shrub,Lilac,21,40,31
+Tree/Shrub,Maple,21,40,31
+Tree/Shrub,Mockorange,21,40,31
+Tree/Shrub,New Jersey Tea,21,40,31
+Tree/Shrub,Oaks,21,40,31
+Tree/Shrub,Ohio Buckeye,21,40,31
+Tree/Shrub,Potentilla,0,40,20
+Tree/Shrub,Red Cedar,41,30,21
+Tree/Shrub,Red Twig Dogwood,41,60,51
+Tree/Shrub,Rhodendron,41,60,51
+Tree/Shrub,Roses,21,40,31
+Tree/Shrub,Rugosa rose,0,40,20
+Tree/Shrub,Saucer magnolia,21,40,31
+Tree/Shrub,Serviceberry,21,60,41
+Tree/Shrub,Silver Maple,21,60,41
+Tree/Shrub,Spirea,21,40,31
+Tree/Shrub,Spruce,21,40,31
+Tree/Shrub,Sugar Maple,21,40,31
+Tree/Shrub,Swamp White Oak,61,80,71
+Tree/Shrub,Sweetshrub,21,60,41
+Tree/Shrub,Tamarac,61,80,71
+Tree/Shrub,White Fir,21,40,31
+Tree/Shrub,White Pine,41,60,51
+Tree/Shrub,Willow,41,80,61
+Fruit,Apple,21,60,41
+Fruit,Grapes,21,60,41
+Fruit,Fig,21,60,41
+Fruit,Pear,21,60,41
+Fruit,Peach,21,60,41
+Fruit,Raspberry,21,60,41
+Fruit,Strawberry,21,60,41
+Fruit,Blackberry,21,60,41
+Fruit,Blueberry,41,60,51
+Fruit,Cranberry,61,80,71
