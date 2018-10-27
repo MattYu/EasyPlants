@@ -21,15 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the set Threshold button and allow it to open the dialog
         setThreshold = findViewById(R.id.button_thresh);
-        setThreshold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: Opening setThresholdDialog");
 
-                setThresholdDialog dialog = new setThresholdDialog();
-                dialog.show(getSupportFragmentManager(), "AddCourseDialogue");
-            }
-        });
     }
 
 
