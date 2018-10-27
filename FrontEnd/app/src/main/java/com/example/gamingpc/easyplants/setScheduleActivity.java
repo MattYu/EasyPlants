@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 public class setScheduleActivity extends AppCompatActivity {
 
+    private static final String TAG = "setScheduleActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

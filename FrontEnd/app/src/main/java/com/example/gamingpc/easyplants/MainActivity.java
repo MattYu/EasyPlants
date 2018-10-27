@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setThreshold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Intent to setThresholdActivity");
                 startActivity(new Intent(MainActivity.this, setThresholdActivity.class));
             }
         });
@@ -34,9 +35,14 @@ public class MainActivity extends AppCompatActivity {
         setSchedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Intent to setScheduleActivitry");
                 startActivity(new Intent(MainActivity.this, setScheduleActivity.class));
             }
         });
+
+        // Initialize the textView and display the appropriate value
+        humidityDisplay = findViewById(R.id.text_humidityReading);
+        // TODO connect to actual humidity reading from arduino
 
     }
 
