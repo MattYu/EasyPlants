@@ -29,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Initialize the setSchedule button and allow it to open the activity
+        setSchedule = findViewById(R.id.button_schedule);
+        setSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, setScheduleActivity.class));
+            }
+        });
+
     }
 
 
