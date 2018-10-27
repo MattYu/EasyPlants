@@ -21,7 +21,7 @@ public class setThresholdDialog extends DialogFragment {
 
         Log.d(TAG, "Dialog Opened");
 
-        
+
 
         return view;
     }
