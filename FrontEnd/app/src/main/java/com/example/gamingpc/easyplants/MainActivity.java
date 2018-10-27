@@ -1,5 +1,6 @@
 package com.example.gamingpc.easyplants;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,8 +20,14 @@ public class MainActivity extends AppCompatActivity {
     // Initializes the UI elements for the main activity
     private void setup() {
 
-        // Initialize the set Threshold button and allow it to open the dialog
+        // Initialize the set Threshold button and allow it to open the activity
         setThreshold = findViewById(R.id.button_thresh);
+        setThreshold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, setThresholdActivity.class));
+            }
+        });
 
     }
 
