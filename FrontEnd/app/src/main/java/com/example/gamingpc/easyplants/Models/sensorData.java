@@ -1,5 +1,6 @@
 package com.example.gamingpc.easyplants.Models;
 
+
 import java.util.Date;
 
 public class SensorData {
@@ -12,12 +13,24 @@ public class SensorData {
     int readStatus;
 
     public SensorData(int dataId, int sensorId, int humidityValue, int humidityAlert, Date alertDate, int readStatus) {
+        //For fetching data
         this.dataId = dataId;
         this.sensorId = sensorId;
         this.humidityValue = humidityValue;
         this.humidityAlert = humidityAlert;
         this.alertDate = alertDate;
         this.readStatus = readStatus;
+    }
+
+    public SensorData(int sensorId, int humidityValue, int humidityAlert) {
+        //for new SensorData
+
+        this.dataId = -1;
+        this.sensorId = sensorId;
+        this.humidityValue = humidityValue;
+        this.humidityAlert = humidityAlert;
+        this.alertDate = new Date();
+        this.readStatus = 0;
     }
 
     public int getDataId() {

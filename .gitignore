@@ -63,3 +63,8 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+.idea/vcs.xml
+.idea/modules.xml
+.idea/codeStyles/Project.xml
+FrontEnd/.idea/misc.xml
+FrontEnd/.idea/misc.xml

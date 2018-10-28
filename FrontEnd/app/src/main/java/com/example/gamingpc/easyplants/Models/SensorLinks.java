@@ -7,13 +7,23 @@ public class SensorLinks {
     int sensorId;
     int userId;
     String sensorSecurityCode;
+    int sensorPairingSuccess;
     int sensorDeleted;
+
+    public SensorLinks(int sensorId, int userId, String sensorSecurityCode, int sensorPairingSuccess, int sensorDeleted) {
+        this.sensorId = sensorId;
+        this.userId = userId;
+        this.sensorSecurityCode = sensorSecurityCode;
+        this.sensorPairingSuccess = sensorPairingSuccess;
+        this.sensorDeleted = sensorDeleted;
+    }
 
     public SensorLinks(int sensorId, int userId) {
         this.sensorId = sensorId;
         this.userId = userId;
         this.sensorDeleted = 0;
         this.sensorSecurityCode = generateSensorSecurityCode(sensorId, userId);
+        this.sensorPairingSuccess = 0;
     }
 
     public void setSensorId(int sensorId) {
@@ -46,6 +56,18 @@ public class SensorLinks {
 
     public void setSensorDeleted(int sensorDeleted) {
         this.sensorDeleted = sensorDeleted;
+    }
+
+    public int getSensorPairingSuccess() {
+        return sensorPairingSuccess;
+    }
+
+    public void setSensorSecurityCode(String sensorSecurityCode) {
+        this.sensorSecurityCode = sensorSecurityCode;
+    }
+
+    public void setSensorPairingSuccess(int sensorPairingSuccess) {
+        this.sensorPairingSuccess = sensorPairingSuccess;
     }
 
     private String generateSensorSecurityCode(int sensorId, int userId){
