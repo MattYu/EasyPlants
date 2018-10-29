@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.example.gamingpc.easyplants.Models.UserThreshold;
@@ -73,12 +74,19 @@ public class setThresholdActivity extends AppCompatActivity {
         String upper = upperThresh.getText().toString();
 
         if(lower.isEmpty() || upper.isEmpty()){
+            Toast.makeText(this, "Invalid Input - One or more of the fields is empty", Toast.LENGTH_LONG).show();
             return false;
         }
-        else if(Integer.valueOf(lower) < 0 || Integer.valueOf(lower) > 100 || Integer.valueOf(lower) > Integer.valueOf(upper))
+        else if(Integer.valueOf(lower) < 0 || Integer.valueOf(lower) > 100 || Integer.valueOf(lower) > Integer.valueOf(upper)) {
+            Toast.makeText(this, "Invalid Input - Min input is incorrect", Toast.LENGTH_LONG).show();
+            lowerThresh.setText("", TextView.BufferType.EDITABLE);
             return false;
-        else if(Integer.valueOf(upper) < 0 || Integer.valueOf(upper) > 100 || Integer.valueOf(upper) < Integer.valueOf(lower))
+        }
+        else if(Integer.valueOf(upper) < 0 || Integer.valueOf(upper) > 100 || Integer.valueOf(upper) < Integer.valueOf(lower)){
+            Toast.makeText(this, "Invalid Input - Max input is incorrect", Toast.LENGTH_LONG).show();
+            lowerThresh.setText("",TextView.BufferType.EDITABLE);
             return false;
+        }
         else{
             return true;
         }
