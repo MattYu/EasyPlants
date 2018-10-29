@@ -1,11 +1,13 @@
 package com.example.gamingpc.easyplants.Database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,7 +15,10 @@ import com.example.gamingpc.easyplants.Models.Password;
 import com.example.gamingpc.easyplants.Models.SensorData;
 import com.example.gamingpc.easyplants.Models.SensorLinks;
 import com.example.gamingpc.easyplants.Models.User;
+import com.example.gamingpc.easyplants.Models.UserThreshold;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,9 +39,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    @SuppressLint("NewApi")
+    public Connection connectionclass(){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Connection connection = null;
+        String ConnectionURL = null;
+        try{
+
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            ConnectionURL = "jdbc:jtds:sqlserver://dbeasyplants.database.windows.net:1433;DatabaseName=EasyPlantsDB;user=MatthewYu@dbeasyplants;password={easyq1w2e3r4Q};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+            connection = DriverManager.getConnection(ConnectionURL);
+
+        }
+        catch(java.sql.SQLException e){
+            Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        catch(ClassNotFoundException e){
+            Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        catch(Exception e){
+            Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return connection;
+    }
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        /* Azure Database Contents
         String CREATE_USER_TABLE =
         "CREATE TABLE " + Config.TABLE_USER + "(" +
                 Config.COLUMN_USER_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -80,6 +115,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Table create SQL: " + CREATE_USER_SENSOR_PAIRING_TABLE);
 
         db.execSQL(CREATE_USER_SENSOR_PAIRING_TABLE);
+        */
+
+        String CREATE_USER_THRESHOLD_TABLE =
+            "CREATE TABLE " + Config.TABLE_USER_THRESHOLD + "(" +
+                    Config.COLUMN_THRESHOLD_ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                    Config.COLUMN_THRESHOLD_MAX + " INTEGER NOT NULL, " +
+                    Config.COLUMN_THRESHOLD_MIN + " INTEGER NOT NULL" +
+                    ")";
+
+        Log.d(TAG, "Table create SQL: " + CREATE_USER_THRESHOLD_TABLE);
+
+        db.execSQL(CREATE_USER_THRESHOLD_TABLE);
 
     }
 
@@ -92,11 +139,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        /*
         db.execSQL("DROP TABLE IF EXISTS " + Config.TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + Config.TABLE_SENSOR_DATA);
         db.execSQL("DROP TABLE IF EXISTS " + Config.TABLE_USER_SENSOR_PAIRING);
+        */
+        db.execSQL("DROP TABLE IF EXISTS " + Config.TABLE_USER_THRESHOLD);
 
         onCreate(db);
+    }
+
+    public long insertUserThreshold(UserThreshold userThreshold){
+        long id = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(Config.COLUMN_THRESHOLD_MAX, userThreshold.getThresholdMax());
+        contentValues.put(Config.COLUMN_THRESHOLD_MIN, userThreshold.getThresholdMin());
+
+        try{
+            id = db.insertOrThrow(Config.TABLE_USER, null, contentValues);
+        }
+        catch(SQLException e){
+            Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        finally{
+            db.close();
+        }
+        return id;
     }
 
     public long insertUser(User user){
@@ -169,6 +240,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         return id;
+    }
+
+    public List<UserThreshold> getAllUserThresholds(){
+        List<UserThreshold> result = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor thresholdCursor = null;
+
+        try{
+            thresholdCursor = db.query(Config.TABLE_USER_THRESHOLD, null, null, null, null, null, null, null);
+
+            if(thresholdCursor != null && thresholdCursor.getCount() > 0){
+                if(thresholdCursor.moveToFirst()){
+                    do{
+
+                        int max = thresholdCursor.getInt(thresholdCursor.getColumnIndex(Config.COLUMN_THRESHOLD_MAX));
+                        int min = thresholdCursor.getInt(thresholdCursor.getColumnIndex(Config.COLUMN_THRESHOLD_MIN));
+
+                        result.add(new UserThreshold(max, min));
+                    }while(thresholdCursor.moveToNext());
+
+                    return result;
+                }
+            }
+        }
+        catch (SQLException e){
+            Log.d(TAG, "Exception: " + e.getMessage());
+            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        finally{
+            if(thresholdCursor != null){
+                thresholdCursor.close();
+            }
+            db.close();
+        }
+        return result;
     }
 
     public List<User> getAllUsers(){
