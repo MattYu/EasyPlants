@@ -30,4 +30,10 @@ public class Config {
     public static final String COLUMN_PAIRING_SUCCESS = "pairing_success";
     public static final String COLUMN_SENSOR_DELETED = "sensor_deleted";
 
+    public static final String TABLE_USER_THRESHOLD = "user_threshold";
+    public static final String COLUMN_THRESHOLD_ID = "threshold_id";
+    public static final String COLUMN_THRESHOLD_MAX = "threshold_max";
+    public static final String COLUMN_THRESHOLD_MIN = "threshold_min";
+    //public static final String COLUMN_USER_ID = "user_id"; TO BE LINKED LATER
+
 }
