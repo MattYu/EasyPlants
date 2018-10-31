@@ -1,14 +1,20 @@
+// grab the packages we need
 var express = require('express');
 var app = express();
+var port = process.env.PORT || 8080;
+
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({	extended: true })); // support encoded bodies
+
+// Database access
+
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
-var path = require('path');
-var bodyParser = require('body-parser');
-
 
 // Create connection to database
 var config = 
-  {
+   {
      userName: 'MatthewYu', 
      password: 'easyq1w2e3r4Q', 
      server: 'dbeasyplants.database.windows.net', 
@@ -17,105 +23,54 @@ var config =
            database: 'EasyPlantsDB' //update me
            , encrypt: true
         }
-  }
-
-
+   }
 var connection = new Connection(config);
 
-// Attempt to connect and execute queries if connection goes through
-connection.connect(function(err) 
-   {
-     if (err) 
-       {
-          console.log(err)
-       }
-    else
-       {
-           app.listen(3000);
-           //queryDatabase();
-           
-       }
-   }
- );
 
-function queryDatabase()
+
+
+
+// ====================================
+// URL PARAMETERS =====================
+// ====================================
+// http://localhost:8080/api/users?id=4&token=sadsf4&geo=us
+app.get('/', function(req, res) {
+  res.end("Welcome to Easy Plants Rest API");
+});
+
+
+
+
+// ====================================
+// POST PARAMETERS ====================
+// ====================================
+
+// POST http://localhost:8080/api/users
+// parameters sent with 
+app.post('/', function(req, res) {
+	var sensor_id = req.body.sensor_id;
+	var humidity_value = req.body.humidity_value;
+
+    queryDatabase(sensor_id, humidity_value);
+	//res.send(sensor_id + ' ' + humidity_value);
+});
+
+function queryDatabase(sensor_id, humidity_value)
    { console.log('Reading rows from the Table...');
 
-       // Read all rows from table
-     request = new Request(
-          "SELECT * FROM [EasyPlantsDB].[sensor_data]",
-             function(err, rowCount, rows) 
-                {
-                    console.log(rowCount + ' row(s) returned');
-                    process.exit();
-                }
-            );
-
-     request.on('row', function(columns) {
-        columns.forEach(function(column) {
-            console.log("%s\t%s", column.metadata.colName, column.value);
-         });
-             });
-     connection.execSql(request);
- }
-
-
-
-/*
-// Configure Azure SQL connection
-var connection = new Connection(config);
-//Establish Azure connection
-
-connection.on('connect', function(err) 
-   {
-     if (err) 
-       {
-          console.log(err)
-       }
-    else
-       {
-           console.log('Connected to Azure');
-           app.listen(3000);
-           console.log('Server listening on port 3000');
-       }
+    request = new Request("INSERT INTO sensor_data (sensor_id, humidity_value, data_date) values (" + String(sensor_id) + "," + String(humidity_value) + ", CURRENT_TIMESTAMP)");
+    //request = new Request("INSERT INTO sensor_data (sensor_id, humidity_value) values (77,7)");
+    connection.execSql(request);  
    }
- );
- */
- 
-app.use(bodyParser.json())
-
-app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname+ '/myfile.html'));
-});
-
-app.post('/', function(req, res) {
-
-    var jsondata = req.body;
-    var values = [];
-    
-    for(var i=0; i< jsondata.length; i++)
-      values.push([jsondata[i].data_id,jsondata[i].sensor_id, jsondata[i].humidity_value, jsondata[i].humidity_alert]);
-    
-    //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    connection.query('INSERT INTO sensor_data (data_id, sensor_id, humidity_value, humidity_alert) VALUES ?', [values], function(err,result) {
-      if(err) {
-         res.send('Error');
-      }
-     else {
-         res.send('Success');
-      }
-});
-});
-
+   
 var http = require('http');
-
 var server = http.createServer(function(request, response) {
 
     response.writeHead(200, {"Content-Type": "text/plain"});
-    response.end("Welcome to Easy Plants Rest API!");
+    response.end("Easy Plants Rest API");
 
 });
 
-
-var port = process.env.PORT || 1337;
-server.listen(port);
+// start the server
+app.listen(port);
+console.log('Server started! At http://localhost:' + port);
