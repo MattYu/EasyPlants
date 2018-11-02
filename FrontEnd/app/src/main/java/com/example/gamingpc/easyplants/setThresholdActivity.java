@@ -47,11 +47,11 @@ public class setThresholdActivity extends AppCompatActivity {
                     helperSave.saveFromUserThreshold(new UserThreshold(Integer.valueOf(upperThresh.getText().toString()), Integer.valueOf(lowerThresh.getText().toString())));
                     String message = lowerThresh.getText().toString() + " - " + upperThresh.getText().toString() + "%";
                     currentMinMax.setText(message);
+                    Toast.makeText(getApplicationContext(), "New Threshold Set", Toast.LENGTH_SHORT).show();
                 }
 
 
-                // TODO set new threshold values to
-                startActivity(new Intent(setThresholdActivity.this, MainActivity.class));
+                //startActivity(new Intent(setThresholdActivity.this, MainActivity.class));
             }
         });
 
