@@ -35,7 +35,7 @@ public class setThresholdActivity extends AppCompatActivity {
 
         SharedPreferenceHelper helperLoad = new SharedPreferenceHelper(setThresholdActivity.this);
         UserThreshold temp = helperLoad.getUserthreshold();
-        String message = temp.getThresholdMax() + " - " + temp.getThresholdMin() + "%";
+        String message = temp.getThresholdMin() + " - " + temp.getThresholdMax() + "%";
         currentMinMax.setText(message);
 
         save.setOnClickListener(new View.OnClickListener() {
