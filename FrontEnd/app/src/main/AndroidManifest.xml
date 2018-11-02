@@ -28,7 +28,8 @@
         <activity
             android:name=".setScheduleActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".cameraActivity"></activity>
+        <activity android:name=".cameraActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

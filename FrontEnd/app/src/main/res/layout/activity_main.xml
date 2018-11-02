@@ -13,9 +13,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:layout_marginBottom="47dp"
+        android:layout_marginEnd="44dp"
+        android:layout_marginRight="44dp"
+        android:layout_marginBottom="103dp"
         android:text="Set Schedule" />
 
     <Button
@@ -25,8 +25,9 @@
         android:layout_alignTop="@+id/button_schedule"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="49dp"
-        android:layout_marginLeft="49dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="0dp"
         android:text="Set Threshold" />
 
     <TextView
@@ -48,17 +49,14 @@
         android:layout_marginTop="183dp"
         android:text="PLACEHOLDER" />
 
-    <android.support.design.widget.FloatingActionButton
+    <Button
         android:id="@+id/button_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="39dp"
-        android:layout_marginRight="39dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        android:layout_alignStart="@+id/button_schedule"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="-74dp"
+        android:layout_marginBottom="34dp"
+        android:text="Camera" />
+
 </android.widget.RelativeLayout>

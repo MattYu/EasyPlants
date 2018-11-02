@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Intent to cameraActivity");
-                startActivity(new Intent(MainActivity.this, setScheduleActivity.class));
+                startActivity(new Intent(MainActivity.this, cameraActivity.class));
             }
         });
 
