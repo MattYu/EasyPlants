@@ -49,8 +49,9 @@ public class cameraActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Grabs the produced bitmap and sets it to the imageView
-        Bitmap imageMap = (Bitmap)data.getExtras().get("data");
-        cameraImage.setImageBitmap(imageMap);
+        //Bitmap imageMap = (Bitmap)data.getExtras().get("data");
+        //cameraImage.setImageBitmap(imageMap);
+        // TODO - Find out where the image needs to be saved, or if it will just be passed to an API directly
 
     }
 
@@ -62,6 +63,7 @@ public class cameraActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         checkPermissions();
+        setup();
     }
 
     // Makes sure that the camera and write permissions have been granted
@@ -74,8 +76,7 @@ public class cameraActivity extends AppCompatActivity {
                 permissions[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[1]) == PackageManager.PERMISSION_GRANTED) {
-
-                // TODO - Add code that opens the camera once permissions are checked
+            
         } else {
             // Get permissions if they are not granted
             ActivityCompat.requestPermissions(cameraActivity.this, permissions, REQUEST_CODE_WC_PERM);
