@@ -47,4 +47,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="183dp"
         android:text="PLACEHOLDER" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="39dp"
+        android:layout_marginRight="39dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
 </android.widget.RelativeLayout>

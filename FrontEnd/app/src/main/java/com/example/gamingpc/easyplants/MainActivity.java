@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     // Set up the UI elements
     Button setThreshold;
     Button setSchedule;
+    Button toCamera;
     TextView humidityDisplay;
 
     // Initializes the UI elements for the main activity
@@ -46,6 +47,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, setScheduleActivity.class));
             }
         });
+
+        // Initialize the button that go to the camera activity
+        toCamera = findViewById(R.id.button_camera);
+        toCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Intent to cameraActivity");
+                startActivity(new Intent(MainActivity.this, setScheduleActivity.class));
+            }
+        });
+
+
 
         // Initialize the textView and display the appropriate value
         humidityDisplay = findViewById(R.id.text_humidityReading);
