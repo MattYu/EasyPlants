@@ -69,6 +69,11 @@ public class setThresholdActivity extends AppCompatActivity {
         setup();
     }
 
+    protected void onStart(){
+        super.onStart();
+
+    }
+
     private boolean isValid(){
         String lower = lowerThresh.getText().toString();
         String upper = upperThresh.getText().toString();
