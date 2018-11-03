@@ -35,7 +35,7 @@ public class setThresholdActivity extends AppCompatActivity {
 
         SharedPreferenceHelper helperLoad = new SharedPreferenceHelper(setThresholdActivity.this);
         UserThreshold temp = helperLoad.getUserthreshold();
-        String message = temp.getThresholdMax() + " - " + temp.getThresholdMin() + "%";
+        String message = temp.getThresholdMin() + " - " + temp.getThresholdMax() + "%";
         currentMinMax.setText(message);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -47,11 +47,11 @@ public class setThresholdActivity extends AppCompatActivity {
                     helperSave.saveFromUserThreshold(new UserThreshold(Integer.valueOf(upperThresh.getText().toString()), Integer.valueOf(lowerThresh.getText().toString())));
                     String message = lowerThresh.getText().toString() + " - " + upperThresh.getText().toString() + "%";
                     currentMinMax.setText(message);
+                    Toast.makeText(getApplicationContext(), "New Threshold Set", Toast.LENGTH_SHORT).show();
                 }
 
 
-                // TODO set new threshold values to
-                startActivity(new Intent(setThresholdActivity.this, MainActivity.class));
+                //startActivity(new Intent(setThresholdActivity.this, MainActivity.class));
             }
         });
 
@@ -67,6 +67,11 @@ public class setThresholdActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setup();
+    }
+
+    protected void onStart(){
+        super.onStart();
+
     }
 
     private boolean isValid(){
