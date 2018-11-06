@@ -29,7 +29,7 @@ public class FirebaseHelper {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        Query query = reference.child("sensor_user_pairing").orderByChild(user_id).equalTo(0);
+        Query query = reference.child("sensor_user_pairing").orderByChild("user_id").equalTo(user_id);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
