@@ -17,8 +17,11 @@
 package com.example.gamingpc.easyplants;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,14 +30,29 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.gamingpc.easyplants.Database.FirebaseHelper;
 import com.example.gamingpc.easyplants.Models.PackageManagerUtils;
 import com.example.gamingpc.easyplants.Models.PermissionUtils;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -51,14 +69,23 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class VisionActivity extends AppCompatActivity {
@@ -68,6 +95,7 @@ public class VisionActivity extends AppCompatActivity {
     private static final String ANDROID_PACKAGE_HEADER = "X-Android-Package";
     private static final int MAX_LABEL_RESULTS = 10;
     private static final int MAX_DIMENSION = 1200;
+    private FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     private static final String TAG = VisionActivity.class.getSimpleName();
     private static final int GALLERY_PERMISSIONS_REQUEST = 0;
@@ -78,10 +106,20 @@ public class VisionActivity extends AppCompatActivity {
     private TextView mImageDetails;
     private ImageView mMainImage;
 
+
+    private  ArrayList<String> plant = new ArrayList<>();
+    private  Map<String, String> minThreshold = new HashMap<>();
+    private  Map<String, String> maxThreshold = new HashMap<>();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vision);
+        View backgroundImage = findViewById(R.id.relativeLayout);
+        Drawable background = backgroundImage.getBackground();
+        background.setAlpha(70);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -95,6 +133,116 @@ public class VisionActivity extends AppCompatActivity {
 
         mImageDetails = findViewById(R.id.image_details);
         mMainImage = findViewById(R.id.main_image);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the search menu action bar.
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_dash, menu);
+
+        // Get the search menu.
+        MenuItem searchMenu = menu.findItem(R.id.app_bar_menu_search);
+
+        // Get SearchView object.
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchMenu);
+
+        // Get SearchView autocomplete object.
+        final SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchAutoComplete.setBackgroundColor(Color.WHITE);
+        searchAutoComplete.setTextColor(Color.GRAY);
+        searchAutoComplete.setDropDownBackgroundResource(android.R.color.holo_blue_light);
+
+        // Populating plant data from Firebase
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("PlantsToHumidity");
+        ref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                            //Get map of users in datasnapshot
+                        setPlantsAndThresholds(dataSnapshot);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, "Error while accessing firebase plantsToHumidity database");
+                    }
+                });
+
+        Toast.makeText(VisionActivity.this, "you clicked " + plant.size(), Toast.LENGTH_LONG).show();
+        // Create a new ArrayAdapter and add data to search auto complete object.
+        ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, plant);
+        searchAutoComplete.setAdapter(newsAdapter);
+
+        // Listen to search view item on click event.
+        searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int itemIndex, long id) {
+                String queryString=(String)adapterView.getItemAtPosition(itemIndex);
+                searchAutoComplete.setText("" + queryString);
+                Toast toast = Toast.makeText(VisionActivity.this, "Press ENTER when ready to confirm: " + queryString + "\nMinimum Threshod: " + minThreshold.get(queryString) + "\nMaximum Threshold: " + maxThreshold.get(queryString), Toast.LENGTH_LONG);
+                TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+                v.setTextColor(Color.rgb(54, 117, 219));
+                v.setTextSize(22);
+                for (int i=0; i< 5; i++) toast.show();
+            }
+        });
+
+        // Below event is triggered when submit search query.
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                AlertDialog alertDialog = new AlertDialog.Builder(VisionActivity.this).create();
+                alertDialog.setMessage("Setting recommendations now");
+                alertDialog.show();
+                Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
+                i.putExtra("Min", minThreshold.get(query));
+                i.putExtra("Max", maxThreshold.get(query));
+                startActivity(i);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+        // Get the share menu item.
+        MenuItem shareMenuItem = menu.findItem(R.id.app_bar_menu_share);
+        // Because it's actionProviderClass is ShareActionProvider, so after below settings
+        // when click this menu item A sharable applications list will popup.
+        // User can choose one application to share.
+        ShareActionProvider shareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareMenuItem);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        shareActionProvider.setShareIntent(shareIntent);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    private void setPlantsAndThresholds(DataSnapshot plantData) {
+
+
+
+        ArrayList<Long> phoneNumbers = new ArrayList<>();
+
+        //iterate through each user, ignoring their UID
+        for (DataSnapshot entry : plantData.getChildren()){
+
+            //Get phone field and append to list
+            String plantName = (String) entry.child("Plant Name").getValue();
+            this.plant.add(plantName);
+            this.minThreshold.put(plantName, Long.toString((long) entry.child("Minimum Humidity %").getValue()));
+            this.maxThreshold.put(plantName, Long.toString((long) entry.child("Maximum Humidity %").getValue()));
+
+        }
+        return;
     }
 
     public void startGalleryChooser() {
