@@ -13,7 +13,7 @@ public class sensorListActivity extends AppCompatActivity {
 
     // Called to set up all the UI elements
     private void setup() {
-        
+
     }
 
     @Override
