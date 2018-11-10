@@ -1,5 +1,6 @@
 package com.example.gamingpc.easyplants;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +33,15 @@ public class sensorListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // Retrieve the sensor id of the list item the user clicked on
+                TextView sensorID = view.findViewById(R.id.text_sensorID);
+                String clickedID = sensorID.getText().toString();
+
+                // Intent to the sensor page
+                Intent intent = new Intent(sensorListActivity.this, sensorPageActivity.class);
+                // Pass the sensor ID to the sensor page
+                intent.putExtra("sensorID", clickedID);
+                startActivity(intent);
             }
         });
     }
@@ -44,6 +54,12 @@ public class sensorListActivity extends AppCompatActivity {
 
         // Enable the back button to the mainActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setup();
+    }
+
+    protected void onStart() {
+        super.onStart();
+
         setup();
     }
 
@@ -77,7 +93,6 @@ public class sensorListActivity extends AppCompatActivity {
             names.setText(PLANTS[i]);
             id.setText("Sensor: " + SENSOR_ID[i]);
             image.setImageResource(R.drawable.plant_test);
-
 
             return view;
         }

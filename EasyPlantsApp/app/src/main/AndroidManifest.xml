@@ -30,7 +30,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".VisionActivity"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -42,8 +42,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".sensorListActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".sensorListActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".sensorPageActivity"
+            android:parentActivityName=".sensorListActivity"></activity>
     </application>
 
 </manifest>

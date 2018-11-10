@@ -27,7 +27,7 @@
         android:layout_marginLeft="118dp"
         android:layout_marginTop="23dp"
         android:text="Plant Name"
-        android:textSize="18dp"/>
+        android:textSize="20dp"/>
 
     <TextView
         android:id="@+id/text_sensorID"
@@ -37,5 +37,5 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="52dp"
         android:text="Sensor ID"
-        android:textSize="18dp"/>
+        android:textSize="14dp"/>
 </RelativeLayout>
