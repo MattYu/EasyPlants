@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name=".setThresholdActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".sensorPageActivity" />
         <activity
             android:name=".cameraActivity"
             android:parentActivityName=".MainActivity" />
@@ -45,8 +45,13 @@
         <activity
             android:name=".sensorListActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".sensorPageActivity"
-            android:parentActivityName=".sensorListActivity"></activity>
+        <activity
+            android:name=".sensorPageActivity"
+            android:parentActivityName=".sensorListActivity" />
+        <activity android:name=".graphActivity"
+            android:parentActivityName=".sensorPageActivity"/>
+        <activity android:name=".sensorOptionActivity"
+            android:parentActivityName=".sensorPageActivity"></activity>
     </application>
 
 </manifest>

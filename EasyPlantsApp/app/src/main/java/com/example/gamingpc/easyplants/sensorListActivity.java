@@ -35,12 +35,15 @@ public class sensorListActivity extends AppCompatActivity {
 
                 // Retrieve the sensor id of the list item the user clicked on
                 TextView sensorID = view.findViewById(R.id.text_sensorID);
+                TextView plantName = view.findViewById(R.id.text_plantName);
                 String clickedID = sensorID.getText().toString();
+                String clickedName = plantName.getText().toString();
 
                 // Intent to the sensor page
                 Intent intent = new Intent(sensorListActivity.this, sensorPageActivity.class);
-                // Pass the sensor ID to the sensor page
+                // Pass the sensor ID and plant name to the sensor page
                 intent.putExtra("sensorID", clickedID);
+                intent.putExtra("plantName", clickedName);
                 startActivity(intent);
             }
         });
