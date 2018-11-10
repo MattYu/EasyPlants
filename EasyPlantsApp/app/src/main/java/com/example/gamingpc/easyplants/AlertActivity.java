@@ -1,5 +1,8 @@
 package com.example.gamingpc.easyplants;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +37,7 @@ public class AlertActivity extends AppCompatActivity {
 
                 //checks if value is inside the threshold
                 if(sensorData.getHumidityValue() < sensorData.getSensorThresholdMin()){
-                    //ToDo Send notification to water the plant
+                    notificationCall();
                 }
                 else if (sensorData.getHumidityValue() > sensorData.getSensorThresholdMax()){
                     //ToDo Send notification to stop watering
@@ -47,7 +50,7 @@ public class AlertActivity extends AppCompatActivity {
 
                 //checks if value is inside the threshold
                 if(sensorData.getHumidityValue() < sensorData.getSensorThresholdMin()){
-                    //ToDo Send notification to water the plant
+                    notificationCall();
                 }
                 else if (sensorData.getHumidityValue() > sensorData.getSensorThresholdMax()){
                     //ToDo Send notification to stop watering
@@ -66,13 +69,26 @@ public class AlertActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                
+
             }
 
         });
+
+
     }
 
+    //Notification function
 
+    public void notificationCall(){
+
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentTitle("Notification from EasyPlant")
+                .setContentText("Water your plant!");
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, notificationBuilder.build());
+
+    }
 
 
 
