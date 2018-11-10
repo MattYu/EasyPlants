@@ -15,7 +15,7 @@
         android:text="Action Bar:"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#FFFFFF"
-        tools:layout_editor_absoluteX="300dp"
+        tools:layout_editor_absoluteX="195dp"
         tools:layout_editor_absoluteY="16dp" />
 
     <include
@@ -23,9 +23,9 @@
         layout="@layout/content_main"
         android:layout_width="294dp"
         android:layout_height="432dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/fab"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -44,11 +44,11 @@
         android:id="@+id/textView"
         android:layout_width="171dp"
         android:layout_height="85dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="196dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="196dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginLeft="102dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="102dp"
+        android:layout_marginRight="102dp"
         android:text="Click above and search our plants database for threeshold recommendations. Press enter to confirm choice."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
