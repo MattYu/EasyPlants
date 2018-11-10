@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 public class sensorOptionActivity extends AppCompatActivity {
 
+    // Initialize the UI elements
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
