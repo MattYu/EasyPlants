@@ -5,41 +5,60 @@ import java.util.Date;
 
 public class SensorData {
 
-    int dataId;
     int sensorId;
     int humidityValue;
-    int humidityAlert;
+    int sensorSecurityCode;
+    int sensorThresholdMax;
+    int sensorThresholdMin;
     Date alertDate;
-    int readStatus;
 
-    public SensorData(int dataId, int sensorId, int humidityValue, int humidityAlert, Date alertDate, int readStatus) {
-        //For fetching data
-        this.dataId = dataId;
+
+    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode, int sensorThresholdMax, int sensorThresholdMin, Date alertDate) {
         this.sensorId = sensorId;
         this.humidityValue = humidityValue;
-        this.humidityAlert = humidityAlert;
+        this.sensorSecurityCode = sensorSecurityCode;
+        this.sensorThresholdMax = sensorThresholdMax;
+        this.sensorThresholdMin = sensorThresholdMin;
         this.alertDate = alertDate;
-        this.readStatus = readStatus;
     }
 
-    public SensorData(int sensorId, int humidityValue, int humidityAlert) {
+
+
+    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode, Date alertDate) {
+        //For fetching data
+        this.sensorId = sensorId;
+        this.humidityValue = humidityValue;
+        this.sensorSecurityCode = sensorSecurityCode;
+        this.alertDate = alertDate;
+
+    }
+
+    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode) {
         //for new SensorData
 
-        this.dataId = -1;
         this.sensorId = sensorId;
         this.humidityValue = humidityValue;
-        this.humidityAlert = humidityAlert;
+        this.sensorSecurityCode = sensorSecurityCode;
         this.alertDate = new Date();
-        this.readStatus = 0;
     }
 
-    public int getDataId() {
-        return dataId;
+
+    public int getSensorThresholdMax() {
+        return sensorThresholdMax;
     }
 
-    public void setDataId(int dataId) {
-        this.dataId = dataId;
+    public void setSensorThresholdMax(int sensorThresholdMax) {
+        this.sensorThresholdMax = sensorThresholdMax;
     }
+
+    public int getSensorThresholdMin() {
+        return sensorThresholdMin;
+    }
+
+    public void setSensorThresholdMin(int sensorThresholdMin) {
+        this.sensorThresholdMin = sensorThresholdMin;
+    }
+
 
     public int getSensorId() {
         return sensorId;
@@ -57,13 +76,11 @@ public class SensorData {
         this.humidityValue = humidityValue;
     }
 
-    public int getHumidityAlert() {
-        return humidityAlert;
+    public int getSensorSecurityCode() {
+        return sensorSecurityCode;
     }
 
-    public void setHumidityAlert(int humidityAlert) {
-        this.humidityAlert = humidityAlert;
-    }
+    public void setSensorSecurityCode(int sensorSecurityCode) { this.sensorSecurityCode = sensorSecurityCode;}
 
     public Date getAlertDate() {
         return alertDate;
@@ -73,11 +90,4 @@ public class SensorData {
         this.alertDate = alertDate;
     }
 
-    public int getReadStatus() {
-        return readStatus;
-    }
-
-    public void setReadStatus(int readStatus) {
-        this.readStatus = readStatus;
-    }
 }

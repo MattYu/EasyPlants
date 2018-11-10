@@ -24,9 +24,8 @@ public class setThresholdActivity extends AppCompatActivity {
 
     // Initializes the UI elements
     private void setup() {
+
         // The text fields
-
-
         lowerThresh = findViewById(R.id.text_newMin);
         upperThresh = findViewById(R.id.text_newMax);
         currentMinMax = findViewById(R.id.text_currentMinMax);

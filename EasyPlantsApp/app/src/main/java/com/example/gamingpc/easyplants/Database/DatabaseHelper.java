@@ -11,7 +11,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.gamingpc.easyplants.Models.Password;
 import com.example.gamingpc.easyplants.Models.SensorData;
 import com.example.gamingpc.easyplants.Models.SensorLinks;
 import com.example.gamingpc.easyplants.Models.User;
@@ -200,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
         contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getHumidityAlert());
+        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
         contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
 
         try{
@@ -670,7 +669,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
         contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getHumidityAlert());
+        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
         contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
         contentValues.put(Config.COLUMN_READ_STATUS, sensorData.getReadStatus());
 
