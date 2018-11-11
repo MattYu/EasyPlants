@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.gamingpc.easyplants.Models.UserThreshold;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SharedPreferenceHelper {
 
@@ -13,11 +15,15 @@ public class SharedPreferenceHelper {
         sharedPreferences = context.getSharedPreferences("ThresholdPreference", Context.MODE_PRIVATE);
     }
 
+    // Saves the threshold the user has input
     public void saveFromUserThreshold(UserThreshold userThreshold){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("ThresholdMax", userThreshold.getThresholdMax());
         editor.putInt("ThresholdMin", userThreshold.getThresholdMin());
         editor.commit();
+
+        // Send the stored data to Firebase
+        toFirebase(Integer.toString(userThreshold.getThresholdMin()),Integer.toString(userThreshold.getThresholdMax()));
     }
 
     public UserThreshold getUserthreshold(){
@@ -28,6 +34,24 @@ public class SharedPreferenceHelper {
         );
 
         return userThreshold;
+    }
+
+    public int getLowerThresh() {
+        return sharedPreferences.getInt("ThresholdMin", 0);
+    }
+
+    public int getUpperThresh() {
+        return sharedPreferences.getInt("ThresholdMax", 100);
+    }
+
+
+    // Sends input threshold data to firebase
+    private void toFirebase(String lower, String upper) {
+
+        DatabaseReference refMin = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("min");
+        DatabaseReference refMax = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("max");
+        refMin.setValue(lower);
+        refMax.setValue(upper);
     }
 
 }

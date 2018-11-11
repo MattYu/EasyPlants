@@ -1,5 +1,8 @@
 package com.example.gamingpc.easyplants.Database;
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -13,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FirebaseHelper {
+
+    private static final String TAG = "Firebase Helper";
 
 
     public void exampleWrite(String user_id, String sensor_id){

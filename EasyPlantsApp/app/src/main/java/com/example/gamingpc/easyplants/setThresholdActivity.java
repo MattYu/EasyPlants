@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.example.gamingpc.easyplants.Models.UserThreshold;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class setThresholdActivity extends AppCompatActivity {
 
@@ -23,6 +25,8 @@ public class setThresholdActivity extends AppCompatActivity {
     EditText lowerThresh;   // User input of lower humidity bound
     EditText upperThresh;   // User input of upper humidity bound
     TextView currentMinMax; // Displays the current set threshold
+
+    // Used to store the threshold valu
 
     // Initializes the UI elements
     private void setup() {
@@ -49,6 +53,8 @@ public class setThresholdActivity extends AppCompatActivity {
                     helperSave.saveFromUserThreshold(new UserThreshold(Integer.valueOf(upperThresh.getText().toString()), Integer.valueOf(lowerThresh.getText().toString())));
                     String message = lowerThresh.getText().toString() + " - " + upperThresh.getText().toString() + "%";
                     currentMinMax.setText(message);
+
+
                     Toast.makeText(getApplicationContext(), "New Threshold Set", Toast.LENGTH_SHORT).show();
                 }
 
@@ -124,4 +130,15 @@ public class setThresholdActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    /*
+    // Sends input threshold data to firebase
+    private void toFirebase(String lower, String upper) {
+
+        DatabaseReference refMin = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("min");
+        DatabaseReference refMax = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("max");
+        refMin.setValue(lower);
+        refMax.setValue(upper);
+    }
+    */
 }
