@@ -77,24 +77,25 @@ public class MainActivity extends AppCompatActivity {
         //notificationCall();
 
         //Retrieve humidity value from firebase database
-        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("message_list").child("humidity_value");
+        //TODO change path of child to read from message_list
+        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
 
+
+        //keep track of humidity value in Firebase
         humidityValue.addValueEventListener(new ValueEventListener() {
-           //addValueEventListener
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer humidity = dataSnapshot.getValue(Integer.class);
-                Log.d(TAG, humidity.toString());
+                Log.d(TAG, Integer.toString(humidity));
 
-                //checks if value is inside the threshold (40)
+                //notify user if humidity is under or over a certain threshold
+                //TODO retrieve threshold from firebase
                 if(humidity < 40){
-                    Log.d(TAG,"send notification");
-                    notificationCall();
+                    notificationCall("Water your plant!");
                 }
-                //else if (sensorData.getHumidityValue() > sensorData.getSensorThresholdMax()){
-                //ToDo Send notification to stop watering
-                //}
-
+                else if (humidity > 60){
+                    notificationCall("Your plant has too much water.");
+                }
             }
 
             @Override
@@ -105,13 +106,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void notificationCall(){
+    public void notificationCall(String message){
 
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"1")
                 .setSmallIcon(R.drawable.plant_test)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setContentTitle("Notification from EasyPlant")
-                .setContentText("Water your plant!");
+                .setContentText(message);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(1, notificationBuilder.build());
         Log.d(TAG,"NotificationCall");
