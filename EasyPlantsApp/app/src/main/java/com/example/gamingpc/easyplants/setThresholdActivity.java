@@ -54,7 +54,7 @@ public class setThresholdActivity extends AppCompatActivity {
                     String message = lowerThresh.getText().toString() + " - " + upperThresh.getText().toString() + "%";
                     currentMinMax.setText(message);
 
-                    toFirebase(lowerThresh.getText().toString(), upperThresh.getText().toString());
+
                     Toast.makeText(getApplicationContext(), "New Threshold Set", Toast.LENGTH_SHORT).show();
                 }
 
@@ -131,6 +131,7 @@ public class setThresholdActivity extends AppCompatActivity {
         }
     }
 
+    /*
     // Sends input threshold data to firebase
     private void toFirebase(String lower, String upper) {
 
@@ -139,4 +140,5 @@ public class setThresholdActivity extends AppCompatActivity {
         refMin.setValue(lower);
         refMax.setValue(upper);
     }
+    */
 }

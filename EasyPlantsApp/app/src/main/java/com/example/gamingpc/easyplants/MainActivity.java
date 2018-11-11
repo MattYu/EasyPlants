@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gamingpc.easyplants.Database.FirebaseHelper;
+import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Used to access firebase functions
     FirebaseHelper fb;
+
 
     // Initializes the UI elements for the main activity
     private void setup() {
@@ -89,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         humidityValue.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Sets up the shared preference helper function
+                SharedPreferenceHelper sp = new SharedPreferenceHelper(getApplicationContext());
+
                 Integer humidity = dataSnapshot.getValue(Integer.class);
                 Log.d(TAG, Integer.toString(humidity));
 
@@ -97,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
                 //notify user if humidity is under or over a certain threshold
                 //TODO retrieve threshold from firebase
-                if(humidity < 40){
+                if(humidity < sp.getLowerThresh()){
                     notificationCall("Water your plant!");
                 }
-                else if (humidity > 60){
+                else if (humidity > sp.getUpperThresh()){
                     notificationCall("Your plant has too much water.");
                 }
             }
