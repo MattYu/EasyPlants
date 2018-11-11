@@ -11,7 +11,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.gamingpc.easyplants.Models.Password;
 import com.example.gamingpc.easyplants.Models.SensorData;
 import com.example.gamingpc.easyplants.Models.SensorLinks;
 import com.example.gamingpc.easyplants.Models.User;
@@ -200,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
         contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getHumidityAlert());
+        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
         contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
 
         try{
@@ -344,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Date alertDate = dateFormat.parse(dataCursor.getString(dataCursor.getColumnIndex(Config.COLUMN_DATA_DATE)));
                             int readStatus = dataCursor.getInt(dataCursor.getColumnIndex(Config.COLUMN_READ_STATUS));
 
-                            result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
+                            //result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
                         }
                         catch(ParseException parseExce){
                             Log.d(TAG, "Exception " + parseExce.getMessage());
@@ -475,7 +474,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Date alertDate = dateFormat.parse(dataCursor.getString(dataCursor.getColumnIndex(Config.COLUMN_DATA_DATE)));
                             int readStatus = dataCursor.getInt(dataCursor.getColumnIndex(Config.COLUMN_READ_STATUS));
 
-                            result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
+                           // result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
                         }
                         catch(ParseException parseExce){
                             Log.d(TAG, "Exception " + parseExce.getMessage());
@@ -525,7 +524,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Date alertDate = dateFormat.parse(dataCursor.getString(dataCursor.getColumnIndex(Config.COLUMN_DATA_DATE)));
                             int readStatus = dataCursor.getInt(dataCursor.getColumnIndex(Config.COLUMN_READ_STATUS));
 
-                            result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
+                            //result.add(new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus));
                         }
                         catch(ParseException parseExce){
                             Log.d(TAG, "Exception " + parseExce.getMessage());
@@ -571,7 +570,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                             Date alertDate = dateFormat.parse(dataCursor.getString(dataCursor.getColumnIndex(Config.COLUMN_DATA_DATE)));
                             int readStatus = dataCursor.getInt(dataCursor.getColumnIndex(Config.COLUMN_READ_STATUS));
 
-                            return new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus);
+                            //return new SensorData(dataId, sensorId, humidityValue, humidityAlert, alertDate, readStatus);
                         }
                         catch(ParseException parseExce){
                             Log.d(TAG, "Exception " + parseExce.getMessage());
@@ -670,13 +669,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
         contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getHumidityAlert());
+        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
         contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
-        contentValues.put(Config.COLUMN_READ_STATUS, sensorData.getReadStatus());
+       // contentValues.put(Config.COLUMN_READ_STATUS, sensorData.getReadStatus());
 
         try{
-            rowCount = db.update(Config.TABLE_SENSOR_DATA, contentValues,
-                    Config.COLUMN_DATA_ID + " = " + sensorData.getDataId(),null);
+            //rowCount = db.update(Config.TABLE_SENSOR_DATA, contentValues,
+                   // Config.COLUMN_DATA_ID + " = " + sensorData.getDataId(),null);
         }
         catch(SQLException e){
             Log.d(TAG, "Exception: " + e.getMessage());
