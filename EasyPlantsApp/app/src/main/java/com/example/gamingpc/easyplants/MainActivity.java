@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.gamingpc.easyplants.Database.FirebaseHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
     Button toSensorList;
     Button toCamera;
     TextView humidityDisplay;
+
+    // Used to access firebase functions
+    FirebaseHelper fb;
 
     // Initializes the UI elements for the main activity
     private void setup() {
@@ -55,9 +59,9 @@ public class MainActivity extends AppCompatActivity {
         });
         */
 
-        // Initialize the textView and display the appropriate value
+        // Initialize the textView
         humidityDisplay = findViewById(R.id.text_humidityReading);
-        // TODO connect to actual humidity reading from arduino
+
 
     }
 
@@ -87,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Integer humidity = dataSnapshot.getValue(Integer.class);
                 Log.d(TAG, Integer.toString(humidity));
+
+                // Update textview with the humidity
+                humidityDisplay.setText(Integer.toString(humidity) + "%");
 
                 //notify user if humidity is under or over a certain threshold
                 //TODO retrieve threshold from firebase
