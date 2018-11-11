@@ -44,7 +44,6 @@
         </provider>
 
 
-        <activity android:name=".AlertActivity"></activity>
         <activity
             android:name=".sensorListActivity"
             android:parentActivityName=".MainActivity" />
