@@ -3,6 +3,7 @@ package com.example.gamingpc.easyplants;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ public class setThresholdActivity extends AppCompatActivity {
 
     // Set up UI elements
     Button save;
+    Button recommendation;
     EditText lowerThresh;   // User input of lower humidity bound
     EditText upperThresh;   // User input of upper humidity bound
     TextView currentMinMax; // Displays the current set threshold
@@ -31,6 +33,7 @@ public class setThresholdActivity extends AppCompatActivity {
         currentMinMax = findViewById(R.id.text_currentMinMax);
         // Save button and its listener
         save = findViewById(R.id.button_save);
+        recommendation = findViewById(R.id.buttonRecommendation);
 
         SharedPreferenceHelper helperLoad = new SharedPreferenceHelper(setThresholdActivity.this);
         UserThreshold temp = helperLoad.getUserthreshold();
@@ -54,6 +57,14 @@ public class setThresholdActivity extends AppCompatActivity {
             }
         });
 
+        recommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Intent to cameraActivity");
+                startActivity(new Intent(setThresholdActivity.this, VisionActivity.class));
+            }
+        });
+
     }
 
 
@@ -71,6 +82,24 @@ public class setThresholdActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        lowerThresh = findViewById(R.id.text_newMin);
+        upperThresh = findViewById(R.id.text_newMax);
+        Intent intent = getIntent();
+        if (intent.hasExtra("Min")) {
+
+                lowerThresh.setText(intent.getStringExtra("Min"));
+
+        }
+        if (intent.hasExtra("Max")) {
+
+            upperThresh.setText(intent.getStringExtra("Max"));
+
+        }
     }
 
     private boolean isValid(){

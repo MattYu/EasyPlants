@@ -4,14 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".setScheduleActivity">
+    tools:context=".graphActivity">
 
-    <TextView
-        android:id="@+id/text_placeholder"
-        android:layout_width="232dp"
-        android:layout_height="59dp"
-        android:text="Placeholder"
-        android:textSize="36dp"
-        tools:layout_editor_absoluteX="76dp"
-        tools:layout_editor_absoluteY="226dp" />
 </android.support.constraint.ConstraintLayout>

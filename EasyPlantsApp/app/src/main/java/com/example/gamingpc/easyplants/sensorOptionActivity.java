@@ -3,16 +3,17 @@ package com.example.gamingpc.easyplants;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class setScheduleActivity extends AppCompatActivity {
+public class sensorOptionActivity extends AppCompatActivity {
 
-    private static final String TAG = "setScheduleActivity";
+    // Initialize the UI elements
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_set_schedule);
+        setContentView(R.layout.activity_sensor_option);
 
-        // Activates the action bar back button
+        // Enable the back button to the mainActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 }
