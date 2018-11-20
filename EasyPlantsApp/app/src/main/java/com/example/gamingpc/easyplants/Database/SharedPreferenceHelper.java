@@ -26,6 +26,12 @@ public class SharedPreferenceHelper {
         toFirebase(Integer.toString(userThreshold.getThresholdMin()),Integer.toString(userThreshold.getThresholdMax()));
     }
 
+    public String getHumidity(){
+        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
+        String humidity = humidityValue.getKey();
+        return  humidity;
+    }
+
     public UserThreshold getUserthreshold(){
         UserThreshold userThreshold = new UserThreshold(
                 -1,

@@ -3,9 +3,18 @@ package com.example.gamingpc.easyplants;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 
 public class sensorPageActivity extends AppCompatActivity {
 
@@ -17,17 +26,24 @@ public class sensorPageActivity extends AppCompatActivity {
     private Button toThreshold;
     private Button toGraph;
     private Button toOptions;
+    private TextView displayHumidity;
 
     // Holds the values passed from sensorListActivity
     private String sensorID;
     private String plantName;
+
+
 
     // Grabs the data that was passed from the previous intent
     private void getPassedData() {
         Intent received = getIntent();
         sensorID = received.getStringExtra("sensorID");
         plantName = received.getStringExtra("plantName");
+
     }
+
+    //Grabs humidity
+
 
     // Sets up all the ui and data elements for the activity
     private void setup() {
@@ -35,6 +51,7 @@ public class sensorPageActivity extends AppCompatActivity {
         // Connect the text views
         displayPlantName = findViewById(R.id.text_sensorPageName);
         displaySensorID = findViewById(R.id.text_sensorPageID);
+        displayHumidity = findViewById(R.id.text_humidityReading);
         // Fill the text views with the sensor id and plant name
         displayPlantName.setText(plantName);
         displaySensorID.setText(sensorID);
@@ -71,6 +88,35 @@ public class sensorPageActivity extends AppCompatActivity {
                 startActivity(optionsIntent);
             }
         });
+
+
+        //Retrieve humidity value from firebase database
+        //TODO change path of child to read from message_list
+        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
+
+        //keep track of humidity value in Firebase
+        humidityValue.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Sets up the shared preference helper function
+                SharedPreferenceHelper sp = new SharedPreferenceHelper(getApplicationContext());
+
+                Integer humidity = dataSnapshot.getValue(Integer.class);
+                Log.d(TAG, Integer.toString(humidity));
+
+                // Update textview with the humidity
+                displayHumidity.setText(Integer.toString(humidity) + "%");
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "Error while accessing firebase HumidityTest database");
+            }
+        });
+
+
+
     }
 
 

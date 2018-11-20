@@ -12,10 +12,10 @@
         android:layout_height="34dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="27dp"
+        android:gravity="center"
         android:text="TextView"
-        android:textSize="24dp"
-        android:gravity="center"/>
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/text_sensorPageID"
@@ -23,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_sensorPageName"
         android:layout_centerHorizontal="true"
-        android:text="TextView"
-        android:textSize="14dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="Sensor: id"
+        android:textSize="14sp" />
 
     <Button
         android:id="@+id/button_toThresh"
@@ -33,24 +33,44 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="189dp"
+        android:layout_marginTop="219dp"
         android:text="Set Threshold" />
 
     <Button
         android:id="@+id/button_toGraph"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button_toThresh"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="257dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="183dp"
         android:text="See Humidity Graph" />
 
     <Button
         android:id="@+id/button_toOptions"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/button_toThresh"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="137dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="121dp"
         android:text="Options" />
+
+    <TextView
+        android:id="@+id/text_humidityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="107dp"
+        android:text="Current Soil Humidity"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/text_humidityReading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="159dp"
+        android:text="Humidity %"
+        android:textSize="18sp" />
 </android.widget.RelativeLayout>

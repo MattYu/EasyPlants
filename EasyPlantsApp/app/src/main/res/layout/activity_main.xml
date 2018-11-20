@@ -10,13 +10,13 @@
         android:id="@+id/button_sensor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="115dp"
         android:layout_marginEnd="149dp"
         android:layout_marginRight="149dp"
-        android:layout_marginBottom="115dp"
-        android:text="Sensors" />
+        android:text="Plants" />
 
     <TextView
         android:id="@+id/text_humidityText"
@@ -35,6 +35,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="183dp"
-        android:text="PLACEHOLDER" />
+        android:text="PLACEHOLDER"
+        android:textSize="24sp" />
 
 </android.widget.RelativeLayout>
