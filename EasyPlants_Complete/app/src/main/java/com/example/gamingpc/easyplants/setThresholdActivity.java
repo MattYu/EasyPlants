@@ -24,8 +24,6 @@ public class setThresholdActivity extends AppCompatActivity {
     // Set up UI elements
     Button save;
     Button recommendation;
-    EditText lowerThresh;   // User input of lower humidity bound
-    EditText upperThresh;   // User input of upper humidity bound
     TextView currentMinMax; // Displays the current set threshold
     TextView currentMessage;
 
@@ -39,8 +37,6 @@ public class setThresholdActivity extends AppCompatActivity {
     private void setup() {
 
         // The text fields
-        lowerThresh = findViewById(R.id.text_newMin);
-        upperThresh = findViewById(R.id.text_newMax);
         currentMinMax = findViewById(R.id.text_currentMinMax);
         currentMessage = findViewById(R.id.text_currentThresh);
 
@@ -155,8 +151,7 @@ public class setThresholdActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        lowerThresh = findViewById(R.id.text_newMin);
-        upperThresh = findViewById(R.id.text_newMax);
+
         Intent intent = getIntent();
         if (intent.hasExtra("Min")) {
 

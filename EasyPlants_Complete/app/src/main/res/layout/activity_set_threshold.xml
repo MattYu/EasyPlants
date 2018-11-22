@@ -7,57 +7,33 @@
     android:layout_height="match_parent"
     tools:context=".setThresholdActivity">
 
-    <EditText
-        android:id="@+id/text_newMin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:digits="0123456789"
-        android:ems="10"
-        android:hint="New Minimum %"
-        android:maxLength="3" />
-
-    <EditText
-        android:id="@+id/text_newMax"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/text_newMin"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="186dp"
-        android:digits="0123456789"
-        android:ems="10"
-        android:hint="New Maximum %"
-        android:maxLength="3" />
-
     <Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="87dp"
+        android:layout_marginBottom="30dp"
         android:text="Save" />
 
     <TextView
         android:id="@+id/text_currentThresh"
         android:layout_width="250dp"
         android:layout_height="90dp"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="-238dp"
-        android:layout_toStartOf="@+id/text_newMin"
-        android:text="How humide would you let the soil to be for your plant?"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:text="Set the humidity threshold of your soil"
+        android:textColor="@android:color/white"
         android:textSize="24dp" />
 
     <TextView
         android:id="@+id/text_currentMinMax"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="137dp"
-        android:layout_marginLeft="137dp"
-        android:layout_marginTop="282dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="219dp"
         android:text="Min - Max %"
         android:textSize="24dp" />
 
@@ -74,13 +50,9 @@
         android:id="@+id/wave_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/text_newMax"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="-244dp"
-        android:background="#ff702e8c"
+        android:background="#112d65"
         wave:above_wave_color="@android:color/white"
         wave:blow_wave_color="@android:color/white"
         wave:progress="80"
@@ -94,6 +66,8 @@
         android:layout_height="80dp"
         android:layout_alignTop="@+id/text_currentMinMax"
         android:layout_alignParentStart="true"
+        android:progressTint="@color/blue"
+        android:cont
         android:layout_marginStart="0dp"
         android:layout_marginTop="-83dp"
         android:layout_marginEnd="0dp"
@@ -105,13 +79,32 @@
         android:id="@+id/seek_bar2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_alignTop="@+id/text_currentMinMax"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="34dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="124dp"
         android:padding="0dp"
         android:paddingBottom="0dp"
         android:progress="80" />
+
+    <TextView
+        android:id="@+id/text_max_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/seek_bar"
+        android:layout_marginStart="17dp"
+        android:text="Maximum"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/text_min_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/text_max_title"
+        android:layout_alignTop="@+id/seek_bar2"
+        android:text="Minimum"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 
 </android.widget.RelativeLayout>

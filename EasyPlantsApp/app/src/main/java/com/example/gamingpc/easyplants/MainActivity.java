@@ -32,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Set up the UI elements
     Button toSensorList;
-    Button toCamera;
     TextView humidityDisplay;
 
     // Used to access firebase functions
     FirebaseHelper fb;
+
+    //stores the humidityValue from firebase
+    Integer humidityValue;
 
 
     // Initializes the UI elements for the main activity
@@ -52,22 +54,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        // Initialize the button that go to the camera activity
-        toCamera = findViewById(R.id.button_camera);
-        toCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Intent to cameraActivity");
-                startActivity(new Intent(MainActivity.this, VisionActivity.class));
-            }
-        });
-        */
 
         // Initialize the textView
         humidityDisplay = findViewById(R.id.text_humidityReading);
-
-
     }
 
 
@@ -78,31 +67,35 @@ public class MainActivity extends AppCompatActivity {
 
         setup();
 
-        //Retrieve humidity value from firebase database
-        //TODO change path of child to read from message_list
-        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
-        //Query query = humidityValue.orderBy("name", Direction.DESCENDING).limit(3);
+        //Retrieve the last humidity value from updated from Firebase database message_list
+        DatabaseReference humidityValueRef = FirebaseDatabase.getInstance().getReference();
+        Query query = humidityValueRef.child("message_list").orderByKey().limitToLast(1);
 
 
         //keep track of humidity value in Firebase
-        humidityValue.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Sets up the shared preference helper function
                 SharedPreferenceHelper sp = new SharedPreferenceHelper(getApplicationContext());
 
-                Integer humidity = dataSnapshot.getValue(Integer.class);
-                Log.d(TAG, Integer.toString(humidity));
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    Log.d(TAG, child.getKey());
+                    Log.d(TAG, child.child("humidity_value").getValue().toString());
+                    humidityValue = child.child("humidity_value").getValue(Integer.class);
+
+                }
+
 
                 // Update textview with the humidity
-                humidityDisplay.setText(Integer.toString(humidity) + "%");
+                humidityDisplay.setText(Integer.toString(humidityValue) + "%");
 
                 //notify user if humidity is under or over a certain threshold
-                //TODO retrieve threshold from firebase
-                if(humidity < sp.getLowerThresh()){
+
+                if(humidityValue < sp.getLowerThresh()){
                     notificationCall("Water your plant!");
                 }
-                else if (humidity > sp.getUpperThresh()){
+                else if (humidityValue > sp.getUpperThresh()){
                     notificationCall("Your plant has too much water.");
                 }
             }

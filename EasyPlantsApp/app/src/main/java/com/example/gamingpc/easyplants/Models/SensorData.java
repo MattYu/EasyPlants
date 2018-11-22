@@ -1,7 +1,11 @@
 package com.example.gamingpc.easyplants.Models;
 
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SensorData {
 
@@ -89,5 +93,15 @@ public class SensorData {
     public void setAlertDate(Date alertDate) {
         this.alertDate = alertDate;
     }
+
+   /* @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("sensor_id", sensorId);
+        result.put("humidity_value", humidityValue);
+
+
+        return result;
+    }*/
 
 }

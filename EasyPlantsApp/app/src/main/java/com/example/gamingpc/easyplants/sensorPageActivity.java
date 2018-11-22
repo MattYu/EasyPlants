@@ -13,6 +13,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -31,6 +32,7 @@ public class sensorPageActivity extends AppCompatActivity {
     // Holds the values passed from sensorListActivity
     private String sensorID;
     private String plantName;
+    private Integer humidityValue;
 
 
 
@@ -90,22 +92,28 @@ public class sensorPageActivity extends AppCompatActivity {
         });
 
 
-        //Retrieve humidity value from firebase database
-        //TODO change path of child to read from message_list
-        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
+
+        //TODO change path of child to read from User Folder
+        //Retrieve the last humidity value from updated from Firebase database message_list
+        DatabaseReference humidityValueRef = FirebaseDatabase.getInstance().getReference();
+        Query query = humidityValueRef.child("message_list").orderByKey().limitToLast(1);
 
         //keep track of humidity value in Firebase
-        humidityValue.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Sets up the shared preference helper function
                 SharedPreferenceHelper sp = new SharedPreferenceHelper(getApplicationContext());
 
-                Integer humidity = dataSnapshot.getValue(Integer.class);
-                Log.d(TAG, Integer.toString(humidity));
+                for (DataSnapshot child: dataSnapshot.getChildren()) {
+                    Log.d(TAG, child.getKey());
+                    Log.d(TAG, child.child("humidity_value").getValue().toString());
+                    humidityValue = child.child("humidity_value").getValue(Integer.class);
+
+                }
 
                 // Update textview with the humidity
-                displayHumidity.setText(Integer.toString(humidity) + "%");
+                displayHumidity.setText(Integer.toString(humidityValue) + "%");
 
             }
 

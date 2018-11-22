@@ -1,6 +1,11 @@
 package com.example.gamingpc.easyplants;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -119,11 +124,43 @@ public class sensorPageActivity extends AppCompatActivity {
 
     }
 
+    public void notificationCall(String message){
+
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"1")
+                .setSmallIcon(R.drawable.plant_test)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentTitle("Notification from EasyPlant")
+                .setContentText(message);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, notificationBuilder.build());
+        Log.d(TAG,"NotificationCall");
+
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notify EasyPlant";
+            String description = "Notification received from EasyPlant";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_page);
+        createNotificationChannel();
+
+        //TODO Create Notification Call when humidity value is under the threshold
+        //TODO Change value on Firebase to enable pump
 
         // Enable the back button to the sensorListActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
