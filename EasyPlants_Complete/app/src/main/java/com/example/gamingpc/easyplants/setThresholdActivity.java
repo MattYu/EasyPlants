@@ -1,6 +1,7 @@
 package com.example.gamingpc.easyplants;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +15,11 @@ import android.widget.Toast;
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.example.gamingpc.easyplants.Models.UserThreshold;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.john.waveview.WaveView;
 import com.myhexaville.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +41,12 @@ public class setThresholdActivity extends AppCompatActivity {
     SeekBar seekBarMin;
     WaveView waveView;
 
+    int initialMinThres = 2;
+    int initialMaxThres = 50;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef;
+
     // Used to store the threshold valu
 
     // Initializes the UI elements
@@ -50,6 +60,45 @@ public class setThresholdActivity extends AppCompatActivity {
         seekBarMax = (SeekBar) findViewById(R.id.seek_bar);
         waveView = (WaveView) findViewById(R.id.wave_view);
         seekBarMin = (SeekBar) findViewById(R.id.seek_bar2);
+
+        Intent intent = getIntent();
+        sensorID = intent.getStringExtra("sensorID");
+
+
+
+        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/MinThreshold");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                initialMinThres= dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+        myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/MaxThreshold");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                initialMaxThres= dataSnapshot.getValue(Integer.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
 
         seekBarMax.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -107,10 +156,18 @@ public class setThresholdActivity extends AppCompatActivity {
 
         SharedPreferenceHelper helperLoad = new SharedPreferenceHelper(setThresholdActivity.this);
         UserThreshold temp = helperLoad.getUserthreshold();
-        String message = temp.getThresholdMin() + " - " + temp.getThresholdMax() + "%";
-        currentMinMax.setText(message);
-        seekBarMin.setProgress(temp.getThresholdMin());
-        seekBarMax.setProgress(temp.getThresholdMax());
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                String message = Integer.toString(initialMaxThres) + " - " + Integer.toString(initialMaxThres) + "%";
+                currentMinMax.setText(message);
+                seekBarMin.setProgress(initialMinThres);
+                seekBarMax.setProgress(initialMaxThres);
+            }
+        }, 2000);
+
+
 
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +204,6 @@ public class setThresholdActivity extends AppCompatActivity {
         // Allow the action bar back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
-        sensorID = intent.getStringExtra("sensorID");
 
         setup();
     }
