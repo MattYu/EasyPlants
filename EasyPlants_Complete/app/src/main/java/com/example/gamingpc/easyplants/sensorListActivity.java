@@ -93,11 +93,13 @@ public class sensorListActivity extends AppCompatActivity {
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
+                        mWaveSwipeRefreshLayout.setEnabled(false);
                         CustomAdapter customAdapter = new CustomAdapter();
                         sensorList.setAdapter(customAdapter);
                     }
                 }, 1000);
                 new Task().execute("");
+                mWaveSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
