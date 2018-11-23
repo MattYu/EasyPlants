@@ -16,12 +16,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.myhexaville.login.LoginActivity;
 import com.ramotion.circlemenu.CircleMenuView;
 
 public class sensorPageActivity extends AppCompatActivity {
@@ -38,6 +41,7 @@ public class sensorPageActivity extends AppCompatActivity {
     private TextView icon2;
     private TextView icon3;
 
+    FirebaseAuth mAuth;
 
     // Holds the values passed from sensorListActivity
     private String sensorID;
@@ -204,6 +208,8 @@ public class sensorPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sensor_page);
         createNotificationChannel();
 
+        mAuth = FirebaseAuth.getInstance();
+
         //TODO Create Notification Call when humidity value is under the threshold
         //TODO Change value on Firebase to enable pump
 
@@ -217,6 +223,11 @@ public class sensorPageActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
         setup();
     }
 

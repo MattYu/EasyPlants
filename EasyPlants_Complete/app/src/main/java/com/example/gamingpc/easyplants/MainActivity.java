@@ -2,6 +2,7 @@ package com.example.gamingpc.easyplants;
 
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +12,16 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.myhexaville.login.LoginActivity;
 
 import android.graphics.Color;
 import com.gelitenight.waveview.library.WaveView;
 
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,6 +71,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        /*
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        DatabaseReference myRef2 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"SensorFolder/DemoSensor/MinThreshold");
+        myRef2.setValue(0);
+
+        DatabaseReference myRef3 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"SensorFolder/DemoSensor/MaxThreshold");
+        myRef3.setValue(100);
+
+        DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"SensorFolder/DemoSensor/SensorData");
+        Map<String, String> mp = new HashMap<>();
+        mp.put("Humidity", "60");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        mp.put("Time", (sdf.format(timestamp)));
+        myRef4.setValue(mp);*/
 
     }
 

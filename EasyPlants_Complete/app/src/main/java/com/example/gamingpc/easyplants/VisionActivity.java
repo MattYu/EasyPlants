@@ -222,17 +222,6 @@ public class VisionActivity extends AppCompatActivity {
             }
         });
 
-
-        // Get the share menu item.
-        MenuItem shareMenuItem = menu.findItem(R.id.app_bar_menu_share);
-        // Because it's actionProviderClass is ShareActionProvider, so after below settings
-        // when click this menu item A sharable applications list will popup.
-        // User can choose one application to share.
-        ShareActionProvider shareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareMenuItem);
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        shareActionProvider.setShareIntent(shareIntent);
-
         return super.onCreateOptionsMenu(menu);
     }
 

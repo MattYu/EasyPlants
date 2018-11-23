@@ -13,14 +13,18 @@ import android.widget.Toast;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.example.gamingpc.easyplants.Models.UserThreshold;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.john.waveview.WaveView;
-
+import com.myhexaville.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 public class setThresholdActivity extends AppCompatActivity {
 
     private static final String TAG = "setThresholdActivity";
 
+    FirebaseAuth mAuth;
     // Set up UI elements
     Button save;
     Button recommendation;
@@ -37,6 +41,7 @@ public class setThresholdActivity extends AppCompatActivity {
     private void setup() {
 
         // The text fields
+        mAuth = FirebaseAuth.getInstance();
         currentMinMax = findViewById(R.id.text_currentMinMax);
         currentMessage = findViewById(R.id.text_currentThresh);
 
@@ -145,6 +150,11 @@ public class setThresholdActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
 
     }
 
