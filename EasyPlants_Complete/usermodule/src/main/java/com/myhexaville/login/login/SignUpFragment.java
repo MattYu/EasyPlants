@@ -97,8 +97,8 @@ public class SignUpFragment extends Fragment implements OnSignUpListener{
                                     myRef7.setValue("Demo Plant");
 
                                     DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
-                                    Map<String, String> mp = new HashMap<>();
-                                    mp.put("humidity_value", "60");
+                                    Map<String, Object> mp = new HashMap<>();
+                                    mp.put("humidity_value", 60);
                                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
                                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                                     mp.put("Time", (sdf.format(timestamp)));

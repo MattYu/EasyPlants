@@ -268,7 +268,7 @@ public class sensorListActivity extends AppCompatActivity {
         // Temporary until Firebase data is accessed
         @Override
         public int getCount() {
-            return plantName.size()-1;
+            return plantName.size();
         }
 
         @Override

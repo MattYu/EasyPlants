@@ -239,7 +239,7 @@ public class VisionActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(VisionActivity.this).create();
                 alertDialog.setMessage("Setting recommendations now");
                 alertDialog.show();
-                Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
+                //Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
                 DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
                 DatabaseReference minRef = currentRef.child("MinThreshold");
                 DatabaseReference maxRef = currentRef.child("MaxThreshold");
