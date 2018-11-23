@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class sensorListActivity extends AppCompatActivity {
 
     String userFolderDir;
 
+    Button addsensor;
 
     // Test arrays for UI
     List<String> plantName = new ArrayList<>();
@@ -64,6 +66,15 @@ public class sensorListActivity extends AppCompatActivity {
     private void setup() {
 
         sensorList = findViewById(R.id.list_sensors);
+        addsensor = findViewById(R.id.button_addSensor);
+        addsensor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Intent to sensorListActivity");
+                startActivity(new Intent(sensorListActivity.this, SensorRegisterActivity.class));
+            }
+        });
+
 
         mWaveSwipeRefreshLayout = (WaveSwipeRefreshLayout) findViewById(R.id.main_swipe);
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
@@ -229,13 +240,13 @@ public class sensorListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        setup();
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null){
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         }
+        setup();
+
     }
 
     private class Task extends AsyncTask<String, Void, String> {

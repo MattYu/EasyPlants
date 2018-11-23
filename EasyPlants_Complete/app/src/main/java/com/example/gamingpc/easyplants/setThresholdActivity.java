@@ -174,8 +174,15 @@ public class setThresholdActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SharedPreferenceHelper helperSave = new SharedPreferenceHelper(setThresholdActivity.this);
-                helperSave.saveFromUserThreshold(new UserThreshold(seekBarMax.getProgress(), seekBarMin.getProgress()));
+                //SharedPreferenceHelper helperSave = new SharedPreferenceHelper(setThresholdActivity.this);
+                //helperSave.saveFromUserThreshold(new UserThreshold(seekBarMax.getProgress(), seekBarMin.getProgress()));
+
+                DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
+                DatabaseReference minRef = currentRef.child("MinThreshold");
+                DatabaseReference maxRef = currentRef.child("MaxThreshold");
+
+                minRef.setValue(seekBarMin.getProgress());
+                maxRef.setValue(seekBarMax.getProgress());
                 Toast.makeText(getApplicationContext(), "New Threshold Set", Toast.LENGTH_SHORT).show();
 
                 //startActivity(new Intent(setThresholdActivity.this, LoginActivity.class));
@@ -186,7 +193,9 @@ public class setThresholdActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Intent to cameraActivity");
-                startActivity(new Intent(setThresholdActivity.this, VisionActivity.class));
+                Intent visionIntent = new Intent(setThresholdActivity.this, VisionActivity.class);
+                visionIntent.putExtra("sensorID", sensorID);
+                startActivity(visionIntent);
             }
         });
 
@@ -218,23 +227,52 @@ public class setThresholdActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
 
-        Intent intent = getIntent();
-        if (intent.hasExtra("Min")) {
+        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/MinThreshold");
 
-            seekBarMin.setProgress(Integer.parseInt(intent.getStringExtra("Min")));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                initialMinThres= dataSnapshot.getValue(Integer.class);
+            }
 
-        }
-        if (intent.hasExtra("Max")) {
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
 
-            seekBarMax.setProgress(Integer.parseInt(intent.getStringExtra("Max")));
+        myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/MaxThreshold");
 
-        }
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                initialMaxThres= dataSnapshot.getValue(Integer.class);
+            }
 
-        sensorID = intent.getStringExtra("sensorID");
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+
+            seekBarMin.setProgress(initialMinThres);
+
+
+
+            seekBarMax.setProgress(initialMaxThres);
+
 
     }
 
