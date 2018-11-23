@@ -112,6 +112,8 @@ public class VisionActivity extends AppCompatActivity {
     private  Map<String, String> minThreshold = new HashMap<>();
     private  Map<String, String> maxThreshold = new HashMap<>();
 
+    String sensorID;
+
 
 
     @Override
@@ -121,6 +123,9 @@ public class VisionActivity extends AppCompatActivity {
         View backgroundImage = findViewById(R.id.relativeLayout);
         Drawable background = backgroundImage.getBackground();
         background.setAlpha(70);
+
+        Intent received = getIntent();
+        sensorID = received.getStringExtra("sensorID");
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -211,6 +216,7 @@ public class VisionActivity extends AppCompatActivity {
                 Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
                 i.putExtra("Min", minThreshold.get(query));
                 i.putExtra("Max", maxThreshold.get(query));
+                i.putExtra("sensorID", sensorID);
                 startActivity(i);
 
                 return false;

@@ -16,12 +16,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
+import com.example.gamingpc.easyplants.Models.UserThreshold;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import com.myhexaville.login.LoginActivity;
@@ -123,17 +125,17 @@ public class sensorPageActivity extends AppCompatActivity {
             public void onButtonClickAnimationEnd(@NonNull CircleMenuView view, int index) {
                 if (index == 0){
                     Intent threshIntent = new Intent(sensorPageActivity.this, setThresholdActivity.class);
-                    threshIntent.putExtra("id", sensorID);
+                    threshIntent.putExtra("sensorID", sensorID);
                     startActivity(threshIntent);
                 }
                 else if (index == 1){
                     Intent graphIntent = new Intent(sensorPageActivity.this, graphActivity.class);
-                    graphIntent.putExtra("id", sensorID);
+                    graphIntent.putExtra("sensorID", sensorID);
                     startActivity(graphIntent);
                 }
                 else if (index ==2){
                     Intent optionsIntent = new Intent(sensorPageActivity.this, sensorOptionActivity.class);
-                    optionsIntent.putExtra("id", sensorID);
+                    optionsIntent.putExtra("sensorID", sensorID);
                     startActivity(optionsIntent);
                 }
                 Log.d("D", "onButtonClickAnimationEnd| index: " + index);
@@ -146,21 +148,23 @@ public class sensorPageActivity extends AppCompatActivity {
 
         //Retrieve humidity value from firebase database
         //TODO change path of child to read from message_list
-        DatabaseReference humidityValue = FirebaseDatabase.getInstance().getReference().child("HumidityTest").child("humidity_value");
 
-        //keep track of humidity value in Firebase
-        humidityValue.addValueEventListener(new ValueEventListener() {
+
+
+        DatabaseReference myCurrentRef = FirebaseDatabase.getInstance().getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + sensorID);
+        Query query = myCurrentRef.child("SensorData").orderByKey().limitToLast(1);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Sets up the shared preference helper function
-                SharedPreferenceHelper sp = new SharedPreferenceHelper(getApplicationContext());
 
-                Integer humidity = dataSnapshot.getValue(Integer.class);
-                Log.d(TAG, Integer.toString(humidity));
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Integer humidity = child.child("humidity_value").getValue(Integer.class);
+                    Log.d(TAG, Integer.toString(humidity));
 
-                // Update textview with the humidity
-                displayHumidity.setText(Integer.toString(humidity) + "%");
-
+                    // Update textview with the humidity
+                    displayHumidity.setText(Integer.toString(humidity) + "%");
+                }
             }
 
             @Override
@@ -168,9 +172,6 @@ public class sensorPageActivity extends AppCompatActivity {
                 Log.d(TAG, "Error while accessing firebase HumidityTest database");
             }
         });
-
-
-
     }
 
     public void notificationCall(String message){

@@ -31,6 +31,8 @@ public class setThresholdActivity extends AppCompatActivity {
     TextView currentMinMax; // Displays the current set threshold
     TextView currentMessage;
 
+    String sensorID;
+
     SeekBar seekBarMax;
     SeekBar seekBarMin;
     WaveView waveView;
@@ -145,6 +147,9 @@ public class setThresholdActivity extends AppCompatActivity {
         // Allow the action bar back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intent = getIntent();
+        sensorID = intent.getStringExtra("sensorID");
+
         setup();
     }
 
@@ -173,6 +178,9 @@ public class setThresholdActivity extends AppCompatActivity {
             seekBarMax.setProgress(Integer.parseInt(intent.getStringExtra("Max")));
 
         }
+
+        sensorID = intent.getStringExtra("sensorID");
+
     }
 
     /*
