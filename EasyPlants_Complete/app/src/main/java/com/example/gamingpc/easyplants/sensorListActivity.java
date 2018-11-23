@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,9 +60,6 @@ public class sensorListActivity extends AppCompatActivity {
     Map<String, Boolean> uniqueMp = new HashMap<>();
 
 
-    String[] PLANTS = {"Aloe Vera", "Rose Bush", "Poppy"};
-    String[] SENSOR_ID = {"1", "2", "3"};
-
     // Called to set up all the UI elements
     private void setup() {
 
@@ -73,6 +69,23 @@ public class sensorListActivity extends AppCompatActivity {
         mWaveSwipeRefreshLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
             @Override public void onRefresh() {
                 // Do work to refresh the list here.
+                plantName = new ArrayList<>();
+                currentHumidityValue = new ArrayList<>();
+                minHumidityThreshold = new ArrayList<>();
+                deleted = new ArrayList<>();
+                enableReading = new ArrayList<>();
+                sensorId = new ArrayList<>();
+                enabledSensorId = new ArrayList<>();
+                uniqueMp = new HashMap<>();
+
+                refreshData();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        CustomAdapter customAdapter = new CustomAdapter();
+                        sensorList.setAdapter(customAdapter);
+                    }
+                }, 1000);
                 new Task().execute("");
             }
         });
@@ -124,6 +137,8 @@ public class sensorListActivity extends AppCompatActivity {
 
     }
 
+
+
     private void setSensorList(DataSnapshot plantData) {
 
         //reset HashMap and Arrays
@@ -136,6 +151,7 @@ public class sensorListActivity extends AppCompatActivity {
                 continue;
             }
             if (deleted == 0 && !uniqueMp.containsKey(entry.getKey())){
+                sensorId.add(entry.getKey());
                 plantName.add((String) entry.child("PlantName").getValue());
                 minHumidityThreshold.add(Integer.toString(entry.child("MinThreshold").getValue(Integer.class)));
                 int sensorEnabled = entry.child("EnableReading").getValue(Integer.class);
@@ -153,12 +169,7 @@ public class sensorListActivity extends AppCompatActivity {
                         // Sets up the shared preference helper function
 
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            if (child.child("humidity_value").getValue() == null){
-                                currentHumidityValue.add("N/A");
-                            }
-                            else{
                                 currentHumidityValue.add(Integer.toString(child.child("humidity_value").getValue(Integer.class)));
-                            }
                         }
                     }
 
@@ -195,6 +206,26 @@ public class sensorListActivity extends AppCompatActivity {
         setup();
     }
 
+
+    protected void refreshData(){
+        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder");
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                setSensorList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+    }
+
     protected void onStart() {
         super.onStart();
 
@@ -210,7 +241,6 @@ public class sensorListActivity extends AppCompatActivity {
     private class Task extends AsyncTask<String, Void, String> {
       //  ...
       protected String doInBackground(String... params) {
-          long totalSize = 0;
           return "";
       }
 
@@ -246,12 +276,14 @@ public class sensorListActivity extends AppCompatActivity {
 
             TextView names = view.findViewById(R.id.text_plantName);
             TextView id = view.findViewById(R.id.text_sensorID);
+            TextView info = view.findViewById(R.id.text_sensorInfo);
             ImageView image = view.findViewById(R.id.view_plantImage);
 
 
             names.setText(plantName.toArray(new String[0])[i]);
-            id.setText("Current humidity: " + currentHumidityValue.toArray(new String[0])[i] + "\nCurrent minimum humidity: " + minHumidityThreshold.toArray(new String[0])[i] + "\nStatus: " + enableReading.toArray(new String[0])[i]);
-            image.setImageResource(R.drawable.plant_test);
+            id.setText(sensorId.toArray(new String[0])[i]);
+            info.setText("\nCurrent humidity: " + currentHumidityValue.toArray(new String[0])[i] + "\nCurrent minimum humidity: " + minHumidityThreshold.toArray(new String[0])[i] + "\nStatus: " + enableReading.toArray(new String[0])[i]);
+            image.setImageResource(R.drawable.mainplanticon);
 
 
             return view;

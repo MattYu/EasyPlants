@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sensorListActivity">
+    tools:context=".sensorListActivity"
+    android:background="@drawable/rainbackground">
 
     <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_swipe"
-        android:background="@color/green">
+        android:id="@+id/main_swipe">
 
         <ListView
             android:id="@+id/list_sensors"
@@ -21,6 +21,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
+            android:scrollbars = "vertical"
             android:layout_marginTop="61dp" />
     </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
 
