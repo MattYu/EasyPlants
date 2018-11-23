@@ -4,33 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".sensorListActivity">
+    tools:context=".sensorListActivity"
+    android:background="@color/green">
 
-    <TextView
-        android:id="@+id/text_sensorList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="77dp"
-        android:layout_marginLeft="77dp"
-        android:layout_marginTop="10dp"
-        android:text="Connected Sensors"
-        android:textSize="28dp"
-        tools:layout_editor_absoluteX="86dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <ListView
-        android:id="@+id/list_sensors"
+    <jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="363dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="61dp" />
+        android:layout_height="match_parent"
+        android:id="@+id/main_swipe">
+
+        <ListView
+            android:id="@+id/list_sensors"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:scrollbars = "vertical"
+            android:layout_marginTop="61dp" />
+    </jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout>
 
     <Button
         android:id="@+id/button_addSensor"
@@ -43,4 +36,14 @@
         android:layout_marginEnd="28dp"
         android:layout_marginRight="28dp"
         android:text="Add Sensor" />
+
+    <TextView
+        android:id="@+id/textscroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="95dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="Scroll up to refresh live data" />
 </android.widget.RelativeLayout>

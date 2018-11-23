@@ -28,12 +28,21 @@
         android:layout_marginTop="23dp"
         android:text="Plant Name"
         android:textSize="20dp"/>
+    <TextView
+        android:id="@+id/text_sensorInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/text_plantName"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="52dp"
+        android:text="Sensor ID"
+        android:textSize="14dp"/>
 
     <TextView
         android:id="@+id/text_sensorID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/text_plantName"
+        android:layout_alignStart="@+id/text_sensorInfo"
         android:layout_alignParentTop="true"
         android:layout_marginTop="52dp"
         android:text="Sensor ID"

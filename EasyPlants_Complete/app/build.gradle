@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.example.gamingpc.easyplants"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -52,6 +52,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.5'
     implementation 'com.github.john990:WaveView:v0.9'
     implementation 'com.gelitenight.waveview:waveview:1.0.0'
+    implementation 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
+    implementation 'com.ramotion.circlemenu:circle-menu:0.3.1'
+    implementation 'com.github.markushi:circlebutton:1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
