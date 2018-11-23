@@ -4,11 +4,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.ramotion.circlemenu.CircleMenuView;
 
 public class sensorPageActivity extends AppCompatActivity {
 
@@ -28,10 +31,13 @@ public class sensorPageActivity extends AppCompatActivity {
     // Initialize the UI elements
     private TextView displayPlantName;
     private TextView displaySensorID;
-    private Button toThreshold;
-    private Button toGraph;
-    private Button toOptions;
     private TextView displayHumidity;
+    private MenuInflater menu;
+    private TextView menuIcon;
+    private TextView icon1;
+    private TextView icon2;
+    private TextView icon3;
+
 
     // Holds the values passed from sensorListActivity
     private String sensorID;
@@ -54,6 +60,11 @@ public class sensorPageActivity extends AppCompatActivity {
     private void setup() {
 
         // Connect the text views
+        menuIcon = findViewById(R.id.sensor_text_menu);
+        icon1 = findViewById(R.id.sensor_text_icon1);
+        icon2 = findViewById(R.id.sensor_text_icon2);
+        icon3 = findViewById(R.id.sensor_text_icon3);
+
         displayPlantName = findViewById(R.id.text_sensorPageName);
         displaySensorID = findViewById(R.id.text_sensorPageID);
         displayHumidity = findViewById(R.id.text_humidityReading);
@@ -61,38 +72,72 @@ public class sensorPageActivity extends AppCompatActivity {
         displayPlantName.setText(plantName);
         displaySensorID.setText(sensorID);
 
-        // Button to go to setTresholdActivity
-        toThreshold = findViewById(R.id.button_toThresh);
-        toThreshold.setOnClickListener(new View.OnClickListener() {
+        icon1.setText("");
+        icon2.setText("");
+        icon3.setText("");
+
+        final CircleMenuView menu = (CircleMenuView) findViewById(R.id.circle_menu);
+        menu.setEventListener(new CircleMenuView.EventListener() {
             @Override
-            public void onClick(View v) {
-                Intent threshIntent = new Intent(sensorPageActivity.this, setThresholdActivity.class);
-                threshIntent.putExtra("id", sensorID);
-                startActivity(threshIntent);
+            public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {
+                menuIcon.setText("");
+                Log.d("D", "onMenuOpenAnimationStart");
+            }
+
+            @Override
+            public void onMenuOpenAnimationEnd(@NonNull CircleMenuView view) {
+                icon1.setText("Set Humidity levels");
+                icon2.setText("Graph");
+                icon3.setText("Settings");
+                Log.d("D", "onMenuOpenAnimationEnd");
+            }
+
+            @Override
+            public void onMenuCloseAnimationStart(@NonNull CircleMenuView view) {
+                icon1.setText("");
+                icon2.setText("");
+                icon3.setText("");
+
+                Log.d("D", "onMenuCloseAnimationStart");
+            }
+
+            @Override
+            public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
+                menuIcon.setText("menu");
+                Log.d("D", "onMenuCloseAnimationEnd");
+            }
+
+            @Override
+            public void onButtonClickAnimationStart(@NonNull CircleMenuView view, int index) {
+                icon1.setText("");
+                icon2.setText("");
+                icon3.setText("");
+                Log.d("D", "onButtonClickAnimationStart| index: " + index);
+            }
+
+            @Override
+            public void onButtonClickAnimationEnd(@NonNull CircleMenuView view, int index) {
+                if (index == 0){
+                    Intent threshIntent = new Intent(sensorPageActivity.this, setThresholdActivity.class);
+                    threshIntent.putExtra("id", sensorID);
+                    startActivity(threshIntent);
+                }
+                else if (index == 1){
+                    Intent graphIntent = new Intent(sensorPageActivity.this, graphActivity.class);
+                    graphIntent.putExtra("id", sensorID);
+                    startActivity(graphIntent);
+                }
+                else if (index ==2){
+                    Intent optionsIntent = new Intent(sensorPageActivity.this, sensorOptionActivity.class);
+                    optionsIntent.putExtra("id", sensorID);
+                    startActivity(optionsIntent);
+                }
+                Log.d("D", "onButtonClickAnimationEnd| index: " + index);
             }
         });
 
-        // Button to go to graphActivity
-        toGraph = findViewById(R.id.button_toGraph);
-        toGraph.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent graphIntent = new Intent(sensorPageActivity.this, graphActivity.class);
-                graphIntent.putExtra("id", sensorID);
-                startActivity(graphIntent);
-            }
-        });
 
-        // Button to go to sensorOptionsActivity
-        toOptions = findViewById(R.id.button_toOptions);
-        toOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent optionsIntent = new Intent(sensorPageActivity.this, sensorOptionActivity.class);
-                optionsIntent.putExtra("id", sensorID);
-                startActivity(optionsIntent);
-            }
-        });
+
 
 
         //Retrieve humidity value from firebase database

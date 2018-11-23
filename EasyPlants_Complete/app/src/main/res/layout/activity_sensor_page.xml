@@ -27,40 +27,13 @@
         android:text="Sensor: id"
         android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/button_toThresh"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="219dp"
-        android:text="Set Threshold" />
-
-    <Button
-        android:id="@+id/button_toGraph"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="183dp"
-        android:text="See Humidity Graph" />
-
-    <Button
-        android:id="@+id/button_toOptions"
-        android:layout_width="175dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="121dp"
-        android:text="Options" />
-
     <TextView
         android:id="@+id/text_humidityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="107dp"
+        android:layout_marginTop="87dp"
         android:text="Current Soil Humidity"
         android:textSize="24sp" />
 
@@ -70,7 +43,79 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="159dp"
+        android:layout_marginTop="137dp"
         android:text="Humidity %"
         android:textSize="18sp" />
+
+    <com.ramotion.circlemenu.CircleMenuView
+        android:id="@+id/circle_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        app:button_colors="@array/colors"
+        app:button_icons="@array/icons"
+        app:icon_color="@color/green"
+        app:icon_menu="@drawable/logo_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sensor_text_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/text_sensorPageID"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="219dp"
+        android:layout_marginEnd="13dp"
+        android:text="Menu" />
+
+    <TextView
+        android:id="@+id/sensor_text_icon1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="144dp"
+        android:layout_marginLeft="144dp"
+        android:layout_marginTop="171dp"
+        android:layout_marginEnd="124dp"
+        android:layout_marginRight="124dp"
+        android:text="Set Humidity Alert " />
+
+    <TextView
+        android:id="@+id/sensor_text_icon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="59dp"
+        android:layout_marginLeft="59dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="87dp"
+        android:layout_marginRight="87dp"
+        android:layout_toEndOf="@+id/circle_menu"
+        android:layout_toRightOf="@+id/circle_menu"
+        android:text="Graph" />
+
+    <TextView
+        android:id="@+id/sensor_text_icon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="49dp"
+        android:layout_marginLeft="49dp"
+        android:layout_marginTop="291dp"
+        android:text="Settings" />
+
 </android.widget.RelativeLayout>

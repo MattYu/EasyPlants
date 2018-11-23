@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -171,12 +172,20 @@ public class VisionActivity extends AppCompatActivity {
                     }
                 });
 
-        if (plant.size() == 0) {
-            Toast.makeText(VisionActivity.this, "Oh no! Looks like you don't have an internet connection", Toast.LENGTH_LONG).show();
-        }
+
         // Create a new ArrayAdapter and add data to search auto complete object.
         ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, plant);
         searchAutoComplete.setAdapter(newsAdapter);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (plant.size() == 0) {
+                    Toast.makeText(VisionActivity.this, "Oh no! Looks like you don't have an internet connection", Toast.LENGTH_LONG).show();
+                }
+            }
+        }, 3500);
+
 
         // Listen to search view item on click event.
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
