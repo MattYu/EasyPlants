@@ -38,6 +38,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -244,9 +245,15 @@ public class VisionActivity extends AppCompatActivity {
                 DatabaseReference minRef = currentRef.child("MinThreshold");
                 DatabaseReference maxRef = currentRef.child("MaxThreshold");
 
-                minRef.setValue(Integer.parseInt(minThreshold.get(query)));
-                maxRef.setValue(Integer.parseInt(maxThreshold.get(query)));
-                Toast.makeText(VisionActivity.this, "New settings saved", Toast.LENGTH_LONG).show();
+                if (!TextUtils.isEmpty(minThreshold.get(query)) && !TextUtils.isEmpty(maxThreshold.get(query)))
+                {
+                    minRef.setValue(Integer.parseInt(minThreshold.get(query)));
+                    maxRef.setValue(Integer.parseInt(maxThreshold.get(query)));
+                    Toast.makeText(VisionActivity.this, "New settings saved", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(VisionActivity.this, "Oups! A network error occured", Toast.LENGTH_LONG).show();
+                }
 
                 finish();
                 /*

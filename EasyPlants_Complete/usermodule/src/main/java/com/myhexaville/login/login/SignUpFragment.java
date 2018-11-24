@@ -65,7 +65,7 @@ public class SignUpFragment extends Fragment implements OnSignUpListener{
             handler.postDelayed(new Runnable() {
                 public void run() {
                     if (mAuth.getCurrentUser() == null){
-                        Toast.makeText(getContext(), "Oh no! Please very your info", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Oh no! Please verify your info", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(getContext(), "Signing in!", Toast.LENGTH_SHORT).show();
