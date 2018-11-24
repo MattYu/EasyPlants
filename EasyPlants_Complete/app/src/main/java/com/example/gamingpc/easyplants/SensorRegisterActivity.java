@@ -67,66 +67,71 @@ public class SensorRegisterActivity extends AppCompatActivity {
                             if (dataSnapshot.child(newSensor).exists()) {
                                 String claimed_or_notClaimed = dataSnapshot.child(newSensor).getValue(String.class);
 
-                                if (!"null".equals(claimed_or_notClaimed)){
-                                    Toast.makeText(SensorRegisterActivity.this, "Oh no! The key appears to be already claimed before. Please reset your sensor to factory to complete the pairing", Toast.LENGTH_LONG).show();
+                                if (!"null".equals(claimed_or_notClaimed)) {
+                                    Toast.makeText(SensorRegisterActivity.this, "Saved! Please reset your sensor and connect it to the internet to complete the pairing", Toast.LENGTH_LONG).show();
                                 }
 
-                                //DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
-                                DatabaseReference  currentRef = database.getReference("sensorFolder/" + newSensor);
-                                //DatabaseReference minRef = currentRef.child("MinThreshold");
-                                //DatabaseReference maxRef = currentRef.child("MaxThreshold");
-                                currentRef.setValue("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/SensorData");
+                                if (claimed_or_notClaimed.contains(mAuth.getCurrentUser().getUid())) {
+                                    finish();
+                                }
+                                else {
 
-                                DatabaseReference tempRef = database.getReference("sensorFolder/"  + mAuth.getCurrentUser().getUid() +"/SensorFolder/");
-                                tempRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        // Sets up the shared preference helper function
+                                    //DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
+                                    DatabaseReference currentRef = database.getReference("sensorFolder/" + newSensor);
+                                    //DatabaseReference minRef = currentRef.child("MinThreshold");
+                                    //DatabaseReference maxRef = currentRef.child("MaxThreshold");
+                                    currentRef.setValue("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + sensorID + "/SensorData");
 
-                                        if (!dataSnapshot.child(newSensor).exists()) {
-                                            DatabaseReference myRef2 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/MinThreshold");
-                                            myRef2.setValue(0);
+                                    DatabaseReference tempRef = database.getReference("sensorFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/");
+                                    tempRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            // Sets up the shared preference helper function
 
-                                            DatabaseReference myRef3 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/MaxThreshold");
-                                            myRef3.setValue(100);
+                                            if (!dataSnapshot.child(newSensor).exists()) {
+                                                DatabaseReference myRef2 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/MinThreshold");
+                                                myRef2.setValue(0);
 
-                                            DatabaseReference myRef0 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/AutoWaterOn");
-                                            myRef0.setValue(1);
+                                                DatabaseReference myRef3 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/MaxThreshold");
+                                                myRef3.setValue(100);
 
-                                            DatabaseReference myRef5 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/EnableReading");
-                                            myRef5.setValue(1);
+                                                DatabaseReference myRef0 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/AutoWaterOn");
+                                                myRef0.setValue(1);
 
-                                            DatabaseReference myRef6 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/Deleted");
-                                            myRef6.setValue(0);
+                                                DatabaseReference myRef5 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/EnableReading");
+                                                myRef5.setValue(1);
 
-                                            DatabaseReference myRef7 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/PlantName");
-                                            myRef7.setValue(name);
+                                                DatabaseReference myRef6 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/Deleted");
+                                                myRef6.setValue(0);
 
-                                            DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
-                                            Map<String, Object> mp = new HashMap<>();
-                                            mp.put("humidity_value", 0);
-                                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-                                            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                            mp.put("Time", (sdf.format(timestamp)));
-                                            myRef4.setValue(mp);
+                                                DatabaseReference myRef7 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/PlantName");
+                                                myRef7.setValue(name);
 
-                                            Toast.makeText(SensorRegisterActivity.this, "Successfully registed!", Toast.LENGTH_LONG).show();
-                                            finish();
+                                                DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
+                                                Map<String, Object> mp = new HashMap<>();
+                                                mp.put("humidity_value", 0);
+                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                                mp.put("Time", (sdf.format(timestamp)));
+                                                myRef4.setValue(mp);
+
+                                                Toast.makeText(SensorRegisterActivity.this, "Successfully registed!", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            } else {
+                                                finish();
+                                            }
                                         }
-                                        else{
-                                            finish();
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
                                         }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-
-
+                                    });
+                                }
                             } else {
                                 Toast.makeText(SensorRegisterActivity.this, "The sensor key does not appear to exist", Toast.LENGTH_LONG).show();
                             }
+
+
                         }
 
                         @Override

@@ -90,6 +90,7 @@ public class sensorListActivity extends AppCompatActivity {
                 enabledSensorId = new ArrayList<>();
                 uniqueMp = new HashMap<>();
 
+
                 refreshData();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -309,6 +310,7 @@ public class sensorListActivity extends AppCompatActivity {
                 Toast.makeText(sensorListActivity.this, "We couldn't fetch the data in time. Please verify your network connection", Toast.LENGTH_LONG).show();
             }
 
+            notifyDataSetChanged();
             return view;
         }
     }
