@@ -1,6 +1,7 @@
 package com.myhexaville.login.login;
 
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,7 +18,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.myhexaville.login.R;
+
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpFragment extends Fragment implements OnSignUpListener{
     private FirebaseAuth mAuth;
@@ -55,10 +65,54 @@ public class SignUpFragment extends Fragment implements OnSignUpListener{
             handler.postDelayed(new Runnable() {
                 public void run() {
                     if (mAuth.getCurrentUser() == null){
-                        Toast.makeText(getContext(), "Oh no! Please very your info", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Oh no! Please verify your info", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(getContext(), "Signing in!", Toast.LENGTH_SHORT).show();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"SensorFolder");
+                        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
+                                if (!snapshot.hasChild("DemoSensor")) {
+                                    DatabaseReference myRef8 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/Preference1");
+                                    myRef8.setValue("Alarm On");
+
+                                    DatabaseReference myRef2 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/MinThreshold");
+                                    myRef2.setValue(0);
+
+                                    DatabaseReference myRef3 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/MaxThreshold");
+                                    myRef3.setValue(100);
+
+                                    DatabaseReference myRef0 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/AutoWaterOn");
+                                    myRef0.setValue(1);
+
+                                    DatabaseReference myRef5 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/EnableReading");
+                                    myRef5.setValue(1);
+
+                                    DatabaseReference myRef6 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/Deleted");
+                                    myRef6.setValue(0);
+
+                                    DatabaseReference myRef7 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/plantName");
+                                    myRef7.setValue("Demo Plant");
+
+                                    DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
+                                    Map<String, Object> mp = new HashMap<>();
+                                    mp.put("humidity_value", 60);
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                    mp.put("Time", (sdf.format(timestamp)));
+                                    myRef4.setValue(mp);
+
+                                }
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError error) {
+                                // Failed to read value
+                                Log.w(TAG, "Failed to read value.", error.toException());
+                            }
+                        });
+
                         Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("com.example.gamingpc.easyplants");
                         if (launchIntent != null) {
                             startActivity(launchIntent);//null pointer check in case package name was not found

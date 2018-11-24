@@ -24,14 +24,19 @@
         </activity>
         <activity
             android:name=".setThresholdActivity"
-            android:parentActivityName=".sensorPageActivity" />
+            android:parentActivityName=".sensorPageActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
+            />
         <activity
             android:name=".cameraActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".VisionActivity"
-            android:parentActivityName=".MainActivity" />
-
+            android:parentActivityName=".setThresholdActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
+            />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -43,17 +48,23 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-
         <activity
             android:name=".sensorListActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".sensorPageActivity"
             android:parentActivityName=".sensorListActivity" />
-        <activity android:name=".graphActivity"
-            android:parentActivityName=".sensorPageActivity"/>
-        <activity android:name=".sensorOptionActivity"
-            android:parentActivityName=".sensorPageActivity"></activity>
+        <activity
+            android:name=".graphActivity"
+            android:parentActivityName=".sensorPageActivity" />
+        <activity
+            android:name=".sensorOptionActivity"
+            android:parentActivityName=".sensorPageActivity" />
+        <activity
+            android:name=".SensorRegisterActivity"
+            android:parentActivityName=".sensorListActivity"
+            ></activity>
+
     </application>
 
 </manifest>

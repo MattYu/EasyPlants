@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -37,6 +38,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -69,11 +71,14 @@ import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
 import com.google.api.services.vision.v1.model.EntityAnnotation;
 import com.google.api.services.vision.v1.model.Feature;
 import com.google.api.services.vision.v1.model.Image;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.myhexaville.login.LoginActivity;
 
 import org.w3c.dom.Text;
 
@@ -111,6 +116,13 @@ public class VisionActivity extends AppCompatActivity {
     private  Map<String, String> minThreshold = new HashMap<>();
     private  Map<String, String> maxThreshold = new HashMap<>();
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    private FirebaseAuth mAuth;
+
+
+    String sensorID;
+
 
 
     @Override
@@ -120,6 +132,14 @@ public class VisionActivity extends AppCompatActivity {
         View backgroundImage = findViewById(R.id.relativeLayout);
         Drawable background = backgroundImage.getBackground();
         background.setAlpha(70);
+
+        mAuth = FirebaseAuth.getInstance();
+
+        Intent received = getIntent();
+        sensorID = received.getStringExtra("sensorID");
+
+        //Toast.makeText(VisionActivity.this, sensorID, Toast.LENGTH_LONG).show();
+
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
@@ -137,11 +157,24 @@ public class VisionActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the search menu action bar.
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_dash, menu);
+
 
         // Get the search menu.
         MenuItem searchMenu = menu.findItem(R.id.app_bar_menu_search);
@@ -171,12 +204,20 @@ public class VisionActivity extends AppCompatActivity {
                     }
                 });
 
-        if (plant.size() == 0) {
-            Toast.makeText(VisionActivity.this, "Oh no! Looks like you don't have an internet connection", Toast.LENGTH_LONG).show();
-        }
+
         // Create a new ArrayAdapter and add data to search auto complete object.
         ArrayAdapter<String> newsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, plant);
         searchAutoComplete.setAdapter(newsAdapter);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (plant.size() == 0) {
+                    Toast.makeText(VisionActivity.this, "Oh no! Looks like you don't have an internet connection", Toast.LENGTH_LONG).show();
+                }
+            }
+        }, 3500);
+
 
         // Listen to search view item on click event.
         searchAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -199,10 +240,27 @@ public class VisionActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(VisionActivity.this).create();
                 alertDialog.setMessage("Setting recommendations now");
                 alertDialog.show();
-                Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
+                //Intent i = new Intent(VisionActivity.this, setThresholdActivity.class);
+                DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
+                DatabaseReference minRef = currentRef.child("MinThreshold");
+                DatabaseReference maxRef = currentRef.child("MaxThreshold");
+
+                if (!TextUtils.isEmpty(minThreshold.get(query)) && !TextUtils.isEmpty(maxThreshold.get(query)))
+                {
+                    minRef.setValue(Integer.parseInt(minThreshold.get(query)));
+                    maxRef.setValue(Integer.parseInt(maxThreshold.get(query)));
+                    Toast.makeText(VisionActivity.this, "New settings saved", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(VisionActivity.this, "Oups! A network error occured", Toast.LENGTH_LONG).show();
+                }
+
+                finish();
+                /*
                 i.putExtra("Min", minThreshold.get(query));
                 i.putExtra("Max", maxThreshold.get(query));
-                startActivity(i);
+                i.putExtra("sensorID", sensorID);
+                startActivity(i);*/
 
                 return false;
             }
@@ -212,17 +270,6 @@ public class VisionActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-
-        // Get the share menu item.
-        MenuItem shareMenuItem = menu.findItem(R.id.app_bar_menu_share);
-        // Because it's actionProviderClass is ShareActionProvider, so after below settings
-        // when click this menu item A sharable applications list will popup.
-        // User can choose one application to share.
-        ShareActionProvider shareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareMenuItem);
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("image/*");
-        shareActionProvider.setShareIntent(shareIntent);
 
         return super.onCreateOptionsMenu(menu);
     }

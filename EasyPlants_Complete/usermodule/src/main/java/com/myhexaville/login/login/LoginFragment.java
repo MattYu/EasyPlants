@@ -73,7 +73,7 @@ public class LoginFragment extends Fragment implements OnLoginListener{
                 }
             }, 3500);
 
-            Toast.makeText(getContext(), "Login", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Logging you in...", Toast.LENGTH_SHORT).show();
 
 
         }

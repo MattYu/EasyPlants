@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="icons">
+
+        <item>@drawable/ic_notification</item>
+        <item>@drawable/ic_plants</item>
+        <item>@drawable/ic_settings</item>
+    </array>
+
+    <array name="iconsMain">
+        <item>@drawable/ic_plants</item>
+        <item>@drawable/ic_signout</item>
+    </array>
+
+    <array name="colorsMain">
+        <item>@android:color/holo_green_dark</item>
+        <item>@android:color/holo_purple</item>
+    </array>
+
+    <array name="colors">
+        <item>@android:color/holo_blue_light</item>
+        <item>@android:color/holo_green_dark</item>
+        <item>@android:color/holo_purple</item>
+    </array>
+</resources>
