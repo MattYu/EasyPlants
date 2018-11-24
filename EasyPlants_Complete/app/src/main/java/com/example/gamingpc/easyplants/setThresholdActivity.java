@@ -41,8 +41,8 @@ public class setThresholdActivity extends AppCompatActivity {
     SeekBar seekBarMin;
     WaveView waveView;
 
-    int initialMinThres = 0;
-    int initialMaxThres = 100;
+    Integer initialMinThres = 0;
+    Integer initialMaxThres = 100;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
