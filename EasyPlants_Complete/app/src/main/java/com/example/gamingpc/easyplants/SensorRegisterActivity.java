@@ -65,6 +65,12 @@ public class SensorRegisterActivity extends AppCompatActivity {
                             // This method is called once with the initial value and again
                             // whenever data at this location is updated.
                             if (dataSnapshot.child(newSensor).exists()) {
+                                String claimed_or_notClaimed = dataSnapshot.child(newSensor).getValue(String.class);
+
+                                if (!"null".equals(claimed_or_notClaimed)){
+                                    Toast.makeText(SensorRegisterActivity.this, "Oh no! The key appears to be already claimed before. Please reset your sensor to factory to complete the pairing", Toast.LENGTH_LONG).show();
+                                }
+
                                 //DatabaseReference currentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID);
                                 DatabaseReference  currentRef = database.getReference("sensorFolder/" + newSensor);
                                 //DatabaseReference minRef = currentRef.child("MinThreshold");
