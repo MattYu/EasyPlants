@@ -31,7 +31,7 @@ import com.ramotion.circlemenu.CircleMenuView;
 
 public class sensorPageActivity extends AppCompatActivity {
 
-    private static final String TAG = "sensorListActivity";
+    private static final String TAG = "sensorPageActivity";
 
     // Initialize the UI elements
     private TextView displayPlantName;
