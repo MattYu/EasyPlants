@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.gamingpc.easyplants.Database.SharedPreferenceHelper;
 import com.example.gamingpc.easyplants.Models.UserThreshold;
@@ -159,11 +160,17 @@ public class sensorPageActivity extends AppCompatActivity {
                 // Sets up the shared preference helper function
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Integer humidity = child.child("humidity_value").getValue(Integer.class);
-                    Log.d(TAG, Integer.toString(humidity));
+                    if (child.child("humidity_value").exists()) {
+                        Integer humidity = child.child("humidity_value").getValue(Integer.class);
+                        Log.d(TAG, Integer.toString(humidity));
 
-                    // Update textview with the humidity
-                    displayHumidity.setText(Integer.toString(humidity) + "%");
+
+                        // Update textview with the humidity
+                        displayHumidity.setText(Integer.toString(humidity) + "%");
+                    }
+                    else{
+                        Toast.makeText(sensorPageActivity.this, "Oh no! We couldn't fetch the current humidity", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -158,21 +159,24 @@ public class sensorListActivity extends AppCompatActivity {
         //iterate through each user, ignoring their UID
         for (DataSnapshot entry : plantData.getChildren()) {
             int deleted = 1;
-            try {
+            if (entry.child("Deleted").exists()) {
                 deleted = entry.child("Deleted").getValue(Integer.class);
-            } catch (Exception e) {
-                continue;
             }
             if (deleted == 0 && !uniqueMp.containsKey(entry.getKey())){
                 sensorId.add(entry.getKey());
-                plantName.add((String) entry.child("PlantName").getValue());
-                minHumidityThreshold.add(Integer.toString(entry.child("MinThreshold").getValue(Integer.class)));
-                int sensorEnabled = entry.child("EnableReading").getValue(Integer.class);
-                if (sensorEnabled == 1){
-                    enableReading.add("Enabled");
+                if ( entry.child("PlantName").exists()) {
+                    plantName.add((String) entry.child("PlantName").getValue());
                 }
-                else{
-                    enableReading.add("Disabled");
+                if (entry.child("MinThreshold").exists()) {
+                    minHumidityThreshold.add(Integer.toString(entry.child("MinThreshold").getValue(Integer.class)));
+                }
+                if (entry.child("EnableReading").exists()) {
+                    int sensorEnabled = entry.child("EnableReading").getValue(Integer.class);
+                    if (sensorEnabled == 1) {
+                        enableReading.add("Enabled");
+                    } else {
+                        enableReading.add("Disabled");
+                    }
                 }
                 DatabaseReference myCurrentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey());
                 Query query = myCurrentRef.child("SensorData").orderByKey().limitToLast(1);
@@ -182,7 +186,9 @@ public class sensorListActivity extends AppCompatActivity {
                         // Sets up the shared preference helper function
 
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            if (child.child("humidity_value").exists()) {
                                 currentHumidityValue.add(Integer.toString(child.child("humidity_value").getValue(Integer.class)));
+                            }
                         }
                     }
 
@@ -292,12 +298,16 @@ public class sensorListActivity extends AppCompatActivity {
             TextView info = view.findViewById(R.id.text_sensorInfo);
             ImageView image = view.findViewById(R.id.view_plantImage);
 
-
+            if (plantName.size() != 0 & sensorId.size()!=0 && currentHumidityValue.size() !=0 && minHumidityThreshold.size() !=0 && minHumidityThreshold.size()!=0 && enableReading.size()!=0) {
             names.setText(plantName.toArray(new String[0])[i]);
             id.setText(sensorId.toArray(new String[0])[i]);
-            info.setText("\nCurrent humidity: " + currentHumidityValue.toArray(new String[0])[i] + "\nCurrent minimum humidity: " + minHumidityThreshold.toArray(new String[0])[i] + "\nStatus: " + enableReading.toArray(new String[0])[i]);
-            image.setImageResource(R.drawable.mainplanticon);
 
+                info.setText("\nCurrent humidity: " + currentHumidityValue.toArray(new String[0])[i] + "\nCurrent minimum humidity: " + minHumidityThreshold.toArray(new String[0])[i] + "\nStatus: " + enableReading.toArray(new String[0])[i]);
+                image.setImageResource(R.drawable.mainplanticon);
+            }
+            else{
+                Toast.makeText(sensorListActivity.this, "We couldn't fetch the data in time. Please verify your network connection", Toast.LENGTH_LONG).show();
+            }
 
             return view;
         }
