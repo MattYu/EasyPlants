@@ -162,6 +162,8 @@ public class setThresholdActivity extends AppCompatActivity {
         UserThreshold temp = helperLoad.getUserthreshold();
 
         Handler handler = new Handler();
+        Toast.makeText(getApplicationContext(), "Loading your data...", Toast.LENGTH_SHORT).show();
+
         handler.postDelayed(new Runnable() {
             public void run() {
                 String message = Integer.toString(initialMaxThres) + " - " + Integer.toString(initialMaxThres) + "%";
