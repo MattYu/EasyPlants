@@ -56,10 +56,16 @@
             android:parentActivityName=".sensorListActivity" />
         <activity
             android:name=".graphActivity"
-            android:parentActivityName=".sensorPageActivity" />
+            android:parentActivityName=".sensorPageActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
+            />
         <activity
             android:name=".sensorOptionActivity"
-            android:parentActivityName=".sensorPageActivity" />
+            android:parentActivityName=".sensorPageActivity"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
+            />
         <activity
             android:name=".SensorRegisterActivity"
             android:parentActivityName=".sensorListActivity"
