@@ -73,7 +73,9 @@ public class setThresholdActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                initialMinThres= dataSnapshot.getValue(Integer.class);
+                if (dataSnapshot.exists()) {
+                    initialMinThres= dataSnapshot.getValue(Integer.class);
+                }
             }
 
             @Override
@@ -90,7 +92,9 @@ public class setThresholdActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                initialMaxThres= dataSnapshot.getValue(Integer.class);
+                if (dataSnapshot.exists()) {
+                    initialMaxThres = dataSnapshot.getValue(Integer.class);
+                }
             }
 
             @Override
