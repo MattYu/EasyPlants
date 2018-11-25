@@ -35,7 +35,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="219dp"
         android:text="Min - Max %"
-        android:textSize="24dp" />
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/buttonRecommendation"
@@ -66,7 +67,6 @@
         android:layout_height="80dp"
         android:layout_alignTop="@+id/text_currentMinMax"
         android:layout_alignParentStart="true"
-        android:progressTint="@color/blue"
         android:layout_marginStart="0dp"
         android:layout_marginTop="-83dp"
         android:layout_marginEnd="0dp"
