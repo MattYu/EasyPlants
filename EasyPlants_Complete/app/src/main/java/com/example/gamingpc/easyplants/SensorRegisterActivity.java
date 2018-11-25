@@ -67,7 +67,7 @@ public class SensorRegisterActivity extends AppCompatActivity {
                             if (dataSnapshot.child(newSensor).exists()) {
                                 String claimed_or_notClaimed = dataSnapshot.child(newSensor).getValue(String.class);
                                 DatabaseReference currentRef = database.getReference("sensorFolder/" + newSensor);
-                                currentRef.setValue("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + sensorID + "/SensorData");
+                                currentRef.setValue("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/SensorData");
                                 if (claimed_or_notClaimed.contains(mAuth.getCurrentUser().getUid()) && claimed_or_notClaimed.contains(newSensor)) {
                                     Toast.makeText(SensorRegisterActivity.this, "You already have this sensor... please reset your sensor to pair this sensor", Toast.LENGTH_LONG).show();
                                     DatabaseReference myRef6 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/Deleted");
