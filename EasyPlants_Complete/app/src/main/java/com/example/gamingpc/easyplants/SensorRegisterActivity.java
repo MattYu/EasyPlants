@@ -114,6 +114,8 @@ public class SensorRegisterActivity extends AppCompatActivity {
 
                                                 if (!"null".equals(claimed_or_notClaimed)) {
                                                     Toast.makeText(SensorRegisterActivity.this, "Saved! The key appears to be already claimed... please reset your sensor to pair this sensor", Toast.LENGTH_LONG).show();
+                                                    DatabaseReference myRef8 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/EnableReading");
+                                                    myRef8.setValue(0);
                                                 }
                                                 else {
                                                     Toast.makeText(SensorRegisterActivity.this, "Successfully registed! Please connect your sensor to the internet to finish pairing", Toast.LENGTH_LONG).show();
