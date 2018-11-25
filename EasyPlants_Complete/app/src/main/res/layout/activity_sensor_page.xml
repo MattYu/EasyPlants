@@ -85,6 +85,7 @@
         app:button_icons="@array/icons"
         app:icon_color="@color/green"
         app:icon_menu="@drawable/logo_circle"
+        app:layout_constrainedHeight="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -2,6 +2,7 @@ package com.example.gamingpc.easyplants;
 
 
 import android.content.Intent;
+import com.example.gamingpc.easyplants.sensorPageActivity;
 import android.icu.text.SimpleDateFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -123,6 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        //sensorPageActivity activity = new sensorPageActivity();
+        //activity.sendNotification();
         mWaveHelper = new WaveHelper(waveView);
 
     }
