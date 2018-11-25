@@ -100,8 +100,11 @@ public class sensorListActivity extends AppCompatActivity {
                 enabledSensorId = new ArrayList<>();
                 uniqueMp = new HashMap<>();
 
+
                 refreshData();
                 Handler handler = new Handler();
+                Toast.makeText(getApplicationContext(), "Loading your data...", Toast.LENGTH_SHORT).show();
+
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         //mWaveSwipeRefreshLayout.setEnabled(false);
@@ -377,6 +380,7 @@ public class sensorListActivity extends AppCompatActivity {
                 Toast.makeText(sensorListActivity.this, "We couldn't fetch the data in time. Please verify your network connection", Toast.LENGTH_LONG).show();
             }
 
+            notifyDataSetChanged();
             return view;
         }
     }
