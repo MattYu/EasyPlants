@@ -15,18 +15,22 @@
         android:roundIcon="@drawable/logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".setThresholdActivity"
             android:parentActivityName=".sensorPageActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             />
         <activity
             android:name=".cameraActivity"
@@ -36,6 +40,7 @@
             android:parentActivityName=".setThresholdActivity"
             android:alwaysRetainTaskState="true"
             android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
             />
 
         <provider
@@ -45,24 +50,34 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
+                android:resource="@xml/provider_paths"
+                />
         </provider>
 
         <activity
             android:name=".sensorListActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".sensorPageActivity"
-            android:parentActivityName=".sensorListActivity" />
+            android:parentActivityName=".sensorListActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".graphActivity"
-            android:parentActivityName=".sensorPageActivity" />
+            android:parentActivityName=".sensorPageActivity"
+            android:screenOrientation="landscape"
+            />
         <activity
             android:name=".sensorOptionActivity"
-            android:parentActivityName=".sensorPageActivity" />
+            android:parentActivityName=".sensorPageActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".SensorRegisterActivity"
             android:parentActivityName=".sensorListActivity"
+            android:screenOrientation="portrait"
             ></activity>
 
     </application>

@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
     implementation 'com.ramotion.circlemenu:circle-menu:0.3.1'
     implementation 'com.github.markushi:circlebutton:1.1'
+    implementation 'com.github.lecho:hellocharts-android:v1.5.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
