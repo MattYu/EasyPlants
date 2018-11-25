@@ -33,7 +33,8 @@ public class sensorOptionActivity extends AppCompatActivity {
 
     void setup() {
         // Initialize the auto water switch and set it to water is stored in the firebase
-        /*waterSwitch = findViewById(R.id.switch_autoWater);
+        waterSwitch = findViewById(R.id.switch_autoWater);
+        /*
         DatabaseReference waterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
         waterRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -55,10 +56,11 @@ public class sensorOptionActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read auto-water value.", error.toException());
             }
         });
-
+        */
 
         // Initialize text view and get the plant name value to fill it in
         changeName = findViewById(R.id.text_changeName);
+        /*
         DatabaseReference nameRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/PlantName");
         nameRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,6 +77,7 @@ public class sensorOptionActivity extends AppCompatActivity {
         });
         changeName.setText(displayedName);
         */
+
 
         delete = findViewById(R.id.button_deleteData);
         delete.setOnClickListener(new View.OnClickListener() {
