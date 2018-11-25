@@ -19,7 +19,8 @@ import java.util.List;
 public class graphActivity extends AppCompatActivity {
 
     final String TAG = "GraphActivity";
-    List<SensorData> GraphData = new ArrayList<>();
+    List<SensorData> totalSensorData = new ArrayList<>();
+    List<SensorData> graphData = new ArrayList<>();
 
     String sensorID;
     FirebaseAuth mAuth;
@@ -59,7 +60,7 @@ public class graphActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                fillGraphData(dataSnapshot);
+                fillTotalData(dataSnapshot);
             }
 
             @Override
@@ -70,9 +71,11 @@ public class graphActivity extends AppCompatActivity {
         });
     }
 
-    protected void fillGraphData(DataSnapshot sensorData){
+    protected void fillTotalData(DataSnapshot sensorData){
 
-
+    for(DataSnapshot entry : sensorData.getChildren()){
+        
+    }
 
     }
 
