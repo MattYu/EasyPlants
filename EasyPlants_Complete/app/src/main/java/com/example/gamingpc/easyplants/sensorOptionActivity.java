@@ -12,11 +12,13 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.myhexaville.login.LoginActivity;
 
 public class sensorOptionActivity extends AppCompatActivity {
 
@@ -27,7 +29,6 @@ public class sensorOptionActivity extends AppCompatActivity {
     private Button save;
     Switch waterSwitch;
     private boolean switchState;    // Tracks whether or not the switch is active or not
-    private int switchStateInt;
     private EditText changeName;
     private String displayedName;
     private String sensorID;
@@ -36,38 +37,35 @@ public class sensorOptionActivity extends AppCompatActivity {
 
     void setup() {
         Intent received = getIntent();
+        sensorID = received.getStringExtra("sensorID");
+        displayedName = received.getStringExtra("plantName");
 
         // Initialize the auto water switch and set it to water is stored in the firebase
         waterSwitch = findViewById(R.id.switch_autoWater);
         DatabaseReference initialWaterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
-        //waterSwitch.setChecked(true);
         initialWaterRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    switchStateInt = dataSnapshot.getValue(Integer.class);
-                    if (switchStateInt == 0) {
-                        waterSwitch.setChecked(false);
-                    } else {
-                        waterSwitch.setChecked(true);
-                    }
+                Integer waterValue = dataSnapshot.getValue(Integer.class);
+                if(waterValue == 0) {
+                    waterSwitch.setChecked(false);
+                } else {
+                    waterSwitch.setChecked(true);
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Value was not read
-                Log.w(TAG, "Failed to read autoWater value", error.toException());
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "Failed to retrieve current auto water value");
             }
         });
 
         // Fills in the edit text with the current plant name
         changeName = findViewById(R.id.text_changeName);
-        displayedName = received.getStringExtra("plantName");
         changeName.setText(displayedName);
 
 
-        
+
         delete = findViewById(R.id.button_deleteData);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +105,7 @@ public class sensorOptionActivity extends AppCompatActivity {
                 } else {
                     waterRef.setValue(0);
                 }
+                Toast.makeText(sensorOptionActivity.this, "New Data Saved!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -125,4 +124,21 @@ public class sensorOptionActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setup();
     }
+
+    protected void onStart() {
+        super.onStart();
+        setup();
+    }
+
+    protected void onResume() {
+        super.onResume();
+        setup();
+    }
+
+    protected void onRestart() {
+        super.onRestart();
+        setup();
+    }
 }
+
+
