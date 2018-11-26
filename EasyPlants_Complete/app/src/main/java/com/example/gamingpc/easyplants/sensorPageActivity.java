@@ -142,6 +142,7 @@ public class sensorPageActivity extends AppCompatActivity {
                 else if (index ==2){
                     Intent optionsIntent = new Intent(sensorPageActivity.this, sensorOptionActivity.class);
                     optionsIntent.putExtra("sensorID", sensorID);
+                    optionsIntent.putExtra("plantName", plantName);
                     startActivity(optionsIntent);
                 }
                 Log.d(TAG, "onButtonClickAnimationEnd| index: " + index);

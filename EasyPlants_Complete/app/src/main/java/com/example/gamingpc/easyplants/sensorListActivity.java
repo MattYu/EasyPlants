@@ -186,9 +186,16 @@ public class sensorListActivity extends AppCompatActivity {
                 if ( entry.child("PlantName").exists()) {
                     plantName.add((String) entry.child("PlantName").getValue());
                 }
+                else{
+                    plantName.add("Plant Name Undefined");
+                }
                 if (entry.child("MinThreshold").exists()) {
                     minHumidityThreshold.add(entry.child("MinThreshold").getValue(String.class));
                 }
+                else{
+                    minHumidityThreshold.add("0");
+                }
+
                 if (entry.child("EnableReading").exists()) {
                     int sensorEnabled = entry.child("EnableReading").getValue(Integer.class);
                     if (sensorEnabled == 1) {
@@ -196,6 +203,9 @@ public class sensorListActivity extends AppCompatActivity {
                     } else {
                         enableReading.add("Disabled");
                     }
+                }
+                else{
+                    enableReading.add("Disabled");
                 }
                 DatabaseReference myCurrentRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey());
                 Query query = myCurrentRef.child("SensorData").orderByKey().limitToLast(1);
@@ -208,6 +218,9 @@ public class sensorListActivity extends AppCompatActivity {
                             if (child.child("humidity_value").exists()) {
                                 humidity = child.child("humidity_value").getValue(Integer.class);
                                 currentHumidityValue.add(Integer.toString(child.child("humidity_value").getValue(Integer.class)));
+                            }
+                            else{
+                                currentHumidityValue.add("Humidity Unavailable");
                             }
                         }
 
@@ -254,6 +267,7 @@ public class sensorListActivity extends AppCompatActivity {
 
 
                 });
+
             }
             uniqueMp.put(entry.getKey(), true);
 
@@ -371,7 +385,7 @@ public class sensorListActivity extends AppCompatActivity {
         // Temporary until Firebase data is accessed
         @Override
         public int getCount() {
-            return plantName.size();
+            return sensorId.size();
         }
 
         @Override
