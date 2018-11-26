@@ -214,9 +214,6 @@ public class sensorListActivity extends AppCompatActivity {
                     }
                 });
 
-                if (currentHumidityValue.size() < sensorId.size()){
-                    currentHumidityValue.add("Humidity Unavailable");
-                }
             }
             uniqueMp.put(entry.getKey(), true);
 
