@@ -41,8 +41,8 @@ public class setThresholdActivity extends AppCompatActivity {
     SeekBar seekBarMin;
     WaveView waveView;
 
-    int initialMinThres = 0;
-    int initialMaxThres = 100;
+    Integer initialMinThres = 0;
+    Integer initialMaxThres = 100;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
@@ -162,6 +162,8 @@ public class setThresholdActivity extends AppCompatActivity {
         UserThreshold temp = helperLoad.getUserthreshold();
 
         Handler handler = new Handler();
+        Toast.makeText(getApplicationContext(), "Loading your data...", Toast.LENGTH_SHORT).show();
+
         handler.postDelayed(new Runnable() {
             public void run() {
                 String message = Integer.toString(initialMaxThres) + " - " + Integer.toString(initialMaxThres) + "%";

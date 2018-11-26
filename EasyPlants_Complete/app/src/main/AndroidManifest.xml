@@ -68,11 +68,15 @@
             android:name=".graphActivity"
             android:parentActivityName=".sensorPageActivity"
             android:screenOrientation="landscape"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
             />
         <activity
             android:name=".sensorOptionActivity"
             android:parentActivityName=".sensorPageActivity"
             android:screenOrientation="portrait"
+            android:alwaysRetainTaskState="true"
+            android:launchMode="singleInstance"
             />
         <activity
             android:name=".SensorRegisterActivity"
