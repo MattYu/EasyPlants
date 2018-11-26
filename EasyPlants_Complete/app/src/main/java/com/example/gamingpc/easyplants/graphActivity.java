@@ -1,16 +1,12 @@
 package com.example.gamingpc.easyplants;
 
-import android.app.Fragment;
 import android.content.Intent;
-import android.hardware.Sensor;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -44,9 +42,6 @@ public class graphActivity extends AppCompatActivity {
 
     final String TAG = "GraphActivity";
     List<SensorData> totalSensorData = new ArrayList<>();
-    List<SensorData> graphData = new ArrayList<>();
-
-    List<List<SensorData>> GraphDataYear = new ArrayList<List<SensorData>>();
 
     String[] displayedYears;
     String[] displayedMonths = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -66,6 +61,12 @@ public class graphActivity extends AppCompatActivity {
 
     Button refreshGraphButton = (Button) findViewById(R.id.refreshGraphButton);
 
+    private LineChartView chart;
+    private PreviewLineChartView previewChart;
+    private LineChartData data;
+    private LineChartData previewData;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,153 +74,8 @@ public class graphActivity extends AppCompatActivity {
 
         onSetup();
 
-        if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.graphView, new PlaceholderFragment()).commit();
-        }
-
         // Enable the back button to the mainActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    public static class PlaceholderFragment extends Fragment {
-
-        private LineChartView chart;
-        private PreviewLineChartView previewChart;
-        private LineChartData data;
-        /**
-         * Deep copy of data.
-         */
-        private LineChartData previewData;
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            setHasOptionsMenu(true);
-            View rootView = inflater.inflate(R.layout.activity_graph, container, false);
-
-            chart = (LineChartView) rootView.findViewById(R.id.chart);
-            previewChart = (PreviewLineChartView) rootView.findViewById(R.id.chart_preview);
-
-            // Generate data for previewed chart and copy of that data for preview chart.
-            setDataToGraph();
-
-            chart.setLineChartData(data);
-            // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
-            // zoom/scroll is unnecessary.
-            chart.setZoomEnabled(false);
-            chart.setScrollEnabled(false);
-
-            previewChart.setLineChartData(previewData);
-            previewChart.setViewportChangeListener(new ViewportListener());
-
-            previewX(false);
-
-            return rootView;
-        }
-
-        public void onClickRefreshButton() {
-                setDataToGraph();
-                chart.setLineChartData(data);
-                previewChart.setLineChartData(previewData);
-                previewX(true);
-        }
-
-        private void setDataToGraph() {
-
-            List<PointValue> values = new ArrayList<PointValue>();
-
-            List<SensorData> dataSet = getDataFromDate(currentYear, currentMonth, currentDay);
-
-            for (int i = 0; i < dataSet.size(); ++i) {
-                values.add(new PointValue(i, (float) Math.random() * 100f)); //(x, y)
-            }
-
-            Line line = new Line(values);
-            line.setColor(ChartUtils.COLOR_BLUE);
-            line.setHasPoints(false);// too many values so don't draw points.
-
-            List<Line> lines = new ArrayList<Line>();
-            lines.add(line);
-
-            data = new LineChartData(lines);
-            data.setAxisXBottom(new Axis());
-            data.setAxisYLeft(new Axis().setHasLines(true));
-
-            // prepare preview data, is better to use separate deep copy for preview chart.
-            // Set color to grey to make preview area more visible.
-            previewData = new LineChartData(data);
-            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
-
-        }
-
-        private void previewY() {
-            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            float dy = tempViewport.height() / 4;
-            tempViewport.inset(0, dy);
-            previewChart.setCurrentViewportWithAnimation(tempViewport);
-            previewChart.setZoomType(ZoomType.VERTICAL);
-        }
-
-        private void previewX(boolean animate) {
-            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            float dx = tempViewport.width() / 4;
-            tempViewport.inset(dx, 0);
-            if (animate) {
-                previewChart.setCurrentViewportWithAnimation(tempViewport);
-            } else {
-                previewChart.setCurrentViewport(tempViewport);
-            }
-            previewChart.setZoomType(ZoomType.HORIZONTAL);
-        }
-
-        private void previewXY() {
-            // Better to not modify viewport of any chart directly so create a copy.
-            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
-            // Make temp viewport smaller.
-            float dx = tempViewport.width() / 4;
-            float dy = tempViewport.height() / 4;
-            tempViewport.inset(dx, dy);
-            previewChart.setCurrentViewportWithAnimation(tempViewport);
-        }
-
-        /**
-         * Viewport listener for preview chart(lower one). in {@link #onViewportChanged(Viewport)} method change
-         * viewport of upper chart.
-         */
-        private class ViewportListener implements ViewportChangeListener {
-
-            @Override
-            public void onViewportChanged(Viewport newViewport) {
-                // don't use animation, it is unnecessary when using preview chart.
-                chart.setCurrentViewport(newViewport);
-            }
-
-        }
-
-    }
-
-
-    private static List<SensorData> getDataFromDate(int currentYear, int currentMonth, int currentDay){
-        //TODO : Grab the data related to the current Date from the full list
-
-        List<SensorData> result = new ArrayList<>();
-
-        for(int i = 0; i < totalSensorData.size(); i++){
-            SensorData currentData = totalSensorData.get(i);
-            if(currentData.isSameDate(currentData, currentYear, currentMonth, currentDay)){
-                result.add(currentData);
-            }
-        }
-
-        return result;
-    }
-
-    private void getPassedData() {
-        Intent received = getIntent();
-        sensorID = received.getStringExtra("sensorID");
-
     }
 
     protected void onSetup(){
@@ -342,7 +198,132 @@ public class graphActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+
+        refreshGraphButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickRefreshButton();
+            }
+        });
+
+        setupYear();
+        setGraphConfig();
+
     }
+
+        public void setGraphConfig() {
+
+            chart = (LineChartView) findViewById(R.id.chart);
+            previewChart = (PreviewLineChartView) findViewById(R.id.chart_preview);
+
+            setDataToGraph();
+
+            chart.setLineChartData(data);
+            // Disable zoom/scroll for previewed chart, visible chart ranges depends on preview chart viewport so
+            // zoom/scroll is unnecessary.
+            chart.setZoomEnabled(false);
+            chart.setScrollEnabled(false);
+
+            previewChart.setLineChartData(previewData);
+            previewChart.setViewportChangeListener(new ViewportListener());
+
+            previewX(false);
+
+        }
+
+        public void onClickRefreshButton() {
+                setDataToGraph();
+                chart.setLineChartData(data);
+                previewChart.setLineChartData(previewData);
+                previewX(true);
+        }
+
+        private void setDataToGraph() {
+
+            List<PointValue> values = new ArrayList<PointValue>();
+
+            List<SensorData> dataSet = getDataFromDate(currentYear, currentMonth, currentDay);
+
+            Collections.sort(dataSet);
+
+            float lastValue = 0;
+
+            for (int i = 0; i < 86400; ++i) {
+                if(dataSet.get(i).getHour()*3600 + dataSet.get(i).getMinute() * 60 + dataSet.get(i).getSeconds() == i) {
+                    lastValue = (float)dataSet.get(i).getHumidityValue();
+                            values.add(new PointValue(i, lastValue)); //(x, y)
+                }
+                else{
+                    values.add(new PointValue(i, lastValue));
+                }
+            }
+
+            Line line = new Line(values);
+            line.setColor(ChartUtils.COLOR_BLUE);
+            line.setHasPoints(false);// too many values so don't draw points.
+
+            List<Line> lines = new ArrayList<Line>();
+            lines.add(line);
+
+            data = new LineChartData(lines);
+            data.setAxisXBottom(new Axis());
+            data.setAxisYLeft(new Axis().setHasLines(true));
+
+            // prepare preview data, is better to use separate deep copy for preview chart.
+            // Set color to grey to make preview area more visible.
+            previewData = new LineChartData(data);
+            previewData.getLines().get(0).setColor(ChartUtils.DEFAULT_DARKEN_COLOR);
+
+        }
+
+        private void previewX(boolean animate) {
+            Viewport tempViewport = new Viewport(chart.getMaximumViewport());
+            float dx = tempViewport.width() / 4;
+            tempViewport.inset(dx, 0);
+            if (animate) {
+                previewChart.setCurrentViewportWithAnimation(tempViewport);
+            } else {
+                previewChart.setCurrentViewport(tempViewport);
+            }
+            previewChart.setZoomType(ZoomType.HORIZONTAL);
+        }
+
+        /**
+         * Viewport listener for preview chart(lower one). in {@link #onViewportChanged(Viewport)} method change
+         * viewport of upper chart.
+         */
+        private class ViewportListener implements ViewportChangeListener {
+
+            @Override
+            public void onViewportChanged(Viewport newViewport) {
+                // don't use animation, it is unnecessary when using preview chart.
+                chart.setCurrentViewport(newViewport);
+            }
+
+        }
+
+
+    private List<SensorData> getDataFromDate(int currentYear, int currentMonth, int currentDay){
+        //TODO : Grab the data related to the current Date from the full list
+
+        List<SensorData> result = new ArrayList<>();
+
+        for(int i = 0; i < totalSensorData.size(); i++){
+            SensorData currentData = totalSensorData.get(i);
+            if(currentData.isSameDate(currentData, currentYear, currentMonth, currentDay)){
+                result.add(currentData);
+            }
+        }
+
+        return result;
+    }
+
+    private void getPassedData() {
+        Intent received = getIntent();
+        sensorID = received.getStringExtra("sensorID");
+
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void changeDaysList(int year, int month){
@@ -353,8 +334,6 @@ public class graphActivity extends AppCompatActivity {
     }
 
     protected void setupYear() {
-
-
         displayedYears = getYearsOfData();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, displayedYears);
@@ -363,7 +342,7 @@ public class graphActivity extends AppCompatActivity {
 
     }
 
-    private String[] getYearsOfData() {
+    private String[] getYearsOfData() { //Sets up the year strings to show in the dropdown
 
         List<Integer> years = new ArrayList<Integer>();
 
@@ -390,7 +369,7 @@ public class graphActivity extends AppCompatActivity {
         return result;
     }
 
-    protected void setupDay(int maxDay){
+    protected void setupDay(int maxDay){ //Sets the Day dropdown
 
         if(currentDay > maxDay){
             currentDay = maxDay;
@@ -407,9 +386,7 @@ public class graphActivity extends AppCompatActivity {
 
     }
 
-    protected void fillTotalData(DataSnapshot sensorData){
-
-        //TODO : Gather all data from the Sensor from Firebase
+    protected void fillTotalData(DataSnapshot sensorData){ //Gather SensorData from Database
 
         totalSensorData = new ArrayList<SensorData>();
 

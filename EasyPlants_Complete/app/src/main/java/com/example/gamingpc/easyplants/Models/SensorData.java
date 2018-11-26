@@ -3,7 +3,7 @@ package com.example.gamingpc.easyplants.Models;
 
 import java.util.Date;
 
-public class SensorData {
+public class SensorData implements Comparable<SensorData> {
 
     int humidityValue;
     int year;
@@ -60,5 +60,14 @@ public class SensorData {
 
     public static boolean isSameDate(SensorData data, int year, int month, int day){
         return data.year == year && data.month == month && data.day == day;
+    }
+
+    @Override
+    public int compareTo(SensorData data2){
+
+        int secondsA = hour*3600+minute*60+seconds;
+        int secondsB = data2.getHour()*3600 + data2.getMinute()*60 + data2.getSeconds();
+
+        return Integer.compare(secondsA, secondsB);
     }
 }
