@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,39 +35,18 @@ public class sensorOptionActivity extends AppCompatActivity {
     void setup() {
         // Initialize the auto water switch and set it to water is stored in the firebase
         waterSwitch = findViewById(R.id.switch_autoWater);
-        /*
         DatabaseReference waterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
-        waterRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Called when the data is read or changed in firebase
-                displayedName = dataSnapshot.getValue(String.class);
-                if (dataSnapshot.getValue(Boolean.class)) {
-                    // Set default switch value to on
-                    waterSwitch.setChecked(true);
-                } else {
-                    waterSwitch.setChecked(false);
-                }
-            }
 
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read auto-water value.", error.toException());
-            }
-        });
-        */
 
         // Initialize text view and get the plant name value to fill it in
         changeName = findViewById(R.id.text_changeName);
-        /*
         DatabaseReference nameRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/PlantName");
-        nameRef.addValueEventListener(new ValueEventListener() {
+        nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Called when the data is read or changed in firebase
                 displayedName = dataSnapshot.getValue(String.class);
+                changeName.setText(displayedName);
             }
 
             @Override
@@ -75,8 +55,8 @@ public class sensorOptionActivity extends AppCompatActivity {
                 Log.w(TAG, "Failed to read name value.", error.toException());
             }
         });
-        changeName.setText(displayedName);
-        */
+
+
 
 
         delete = findViewById(R.id.button_deleteData);
@@ -105,7 +85,12 @@ public class sensorOptionActivity extends AppCompatActivity {
                 DatabaseReference waterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
 
                 // Set the new name in firebase
-                nameRef.setValue(changeName.getText().toString());
+                if(changeName.getText().toString().length() < 1) {
+                    Toast.makeText(sensorOptionActivity.this, "Name must be at least one character - Name not changed", Toast.LENGTH_SHORT).show();
+                } else {
+                    nameRef.setValue(changeName.getText().toString());
+                }
+
                 // Set auto water value in firebase
                 switchState = waterSwitch.isChecked();
                 if (switchState) {
