@@ -57,4 +57,8 @@ public class SensorData {
     public int getSeconds() {
         return seconds;
     }
+
+    public static boolean isSameDate(SensorData data, int year, int month, int day){
+        return data.year == year && data.month == month && data.day == day;
+    }
 }
