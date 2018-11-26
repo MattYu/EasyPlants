@@ -112,6 +112,9 @@ public class SensorRegisterActivity extends AppCompatActivity {
                                                 mp.put("Time", (sdf.format(timestamp)));
                                                 myRef4.setValue(mp);
 
+                                                DatabaseReference myRef9 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/AlertTime");
+                                                myRef9.setValue(sdf.format(timestamp));
+
                                                 if (!"null".equals(claimed_or_notClaimed)) {
                                                     Toast.makeText(SensorRegisterActivity.this, "Saved! The key appears to be already claimed... please reset your sensor to pair this sensor", Toast.LENGTH_LONG).show();
                                                     DatabaseReference myRef8 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/EnableReading");

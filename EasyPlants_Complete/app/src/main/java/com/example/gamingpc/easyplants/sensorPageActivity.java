@@ -221,8 +221,6 @@ public class sensorPageActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        //TODO Create Notification Call when humidity value is under the threshold
-        //TODO Change value on Firebase to enable pump
 
         // Enable the back button to the sensorListActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -4,7 +4,9 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -34,7 +36,9 @@ import com.myhexaville.login.LoginActivity;
 import com.google.firebase.database.Query;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -183,7 +187,7 @@ public class sensorListActivity extends AppCompatActivity {
                     plantName.add((String) entry.child("PlantName").getValue());
                 }
                 if (entry.child("MinThreshold").exists()) {
-                    minHumidityThreshold.add(Integer.toString(entry.child("MinThreshold").getValue(Integer.class)));
+                    minHumidityThreshold.add(entry.child("MinThreshold").getValue(String.class));
                 }
                 if (entry.child("EnableReading").exists()) {
                     int sensorEnabled = entry.child("EnableReading").getValue(Integer.class);
@@ -207,12 +211,36 @@ public class sensorListActivity extends AppCompatActivity {
                             }
                         }
 
-                        //Compare humidity value with threshold to send a notification to the user
-                        if(entry.child("PlantName").exists()){
+                        //Compare humidity value with threshold to send a notification to the user only after two minutes
+                        if(entry.child("PlantName").exists() && entry.child("Deleted").getValue(Integer.class) == 0 && entry.child("EnableReading").getValue(Integer.class) == 1){
                             if(humidity < entry.child("MinThreshold").getValue(Integer.class)){
-                                notificationCall("Plant " + entry.child("PlantName").getValue() + " needs watering");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp.getTime());
+
+                                if(timestamp.after(entry.child("AlertTime").getValue(Timestamp.class)) ){
+                                    calendar.add(Calendar.MINUTE, 2);
+                                    timestamp = new Timestamp(calendar.getTimeInMillis());
+                                    //set the new time for the Alert
+                                    DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                    myRef.setValue(sdf.format(timestamp));
+                                    //send the notification
+                                    notificationCall("Plant " + entry.child("PlantName").getValue() + " needs watering");
+                                }
+
                             }
                             if(humidity > entry.child("MaxThreshold").getValue(Integer.class)){
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp.getTime());
+                                calendar.add(Calendar.MINUTE, 2);
+                                timestamp = new Timestamp(calendar.getTimeInMillis());
+                                //set the new time for the Alert
+                                DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                myRef.setValue(sdf.format(timestamp));
+                                //send the notification
                                 notificationCall("Plant " + entry.child("PlantName").getValue() + " has too much water");
                             }
                         }
@@ -253,11 +281,7 @@ public class sensorListActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-       /* Intent snoozeIntent = new Intent(this, BroadcastReceiver.class);
-        snoozeIntent.setAction(ACTION_SNOOZE);
-        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);*/
+
 
         NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"1")
                 .setSmallIcon(R.drawable.logo_circle)
