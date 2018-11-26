@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.gamingpc.easyplants.Models.SensorData;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,7 +74,7 @@ public class graphActivity extends AppCompatActivity {
         onSetup();
 
         if(savedInstanceState == null){
-            getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.graphView, new PlaceholderFragment()).commit();
         }
 
         // Enable the back button to the mainActivity
@@ -131,7 +132,7 @@ public class graphActivity extends AppCompatActivity {
 
             List<SensorData> dataSet = getDataFromDate(currentYear, currentMonth, currentDay);
 
-            for (int i = 0; i < numValues; ++i) {
+            for (int i = 0; i < dataSet.size(); ++i) {
                 values.add(new PointValue(i, (float) Math.random() * 100f)); //(x, y)
             }
 
@@ -364,9 +365,29 @@ public class graphActivity extends AppCompatActivity {
 
     private String[] getYearsOfData() {
 
-        //TODO: Gather the available years from data (if year appears in sensor's data, show it)
+        List<Integer> years = new ArrayList<Integer>();
 
-        return null;
+        for(SensorData data : totalSensorData){
+            boolean isThere = false;
+            for(int year: years){
+                if(data.getYear() == year){
+                    isThere = true;
+                    break;
+                }
+            }
+            if(isThere)
+                continue;
+            else
+                years.add(data.getYear());
+
+        }
+
+        String result[] = new String[years.size()];
+        for(int i = 0; i < result.length; i++){
+            result[i] = Integer.toBinaryString(years.get(i));
+        }
+
+        return result;
     }
 
     protected void setupDay(int maxDay){
@@ -378,7 +399,7 @@ public class graphActivity extends AppCompatActivity {
             for(int i = 1; i <= maxDay; i++){
                 displayedDays[i] = Integer.toString(i);
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, days);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, displayedDays);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             daySelector.setAdapter(adapter);
 
@@ -390,8 +411,32 @@ public class graphActivity extends AppCompatActivity {
 
         //TODO : Gather all data from the Sensor from Firebase
 
+        totalSensorData = new ArrayList<SensorData>();
+
     for(DataSnapshot entry : sensorData.getChildren()){
-        
+
+        Integer humidity;
+        String time;
+
+        if(entry.child("humidity_value").exists()){
+            humidity = entry.child("humidity_value").getValue(Integer.class);
+            Log.d(TAG, Integer.toString(humidity));
+        }
+        else{
+            Toast.makeText(this, "Oh no! We couldn't fetch the current humidity", Toast.LENGTH_LONG).show();
+            continue;
+        }
+
+        if(entry.child("Time").exists()){
+            time = entry.child("humidity_value").getValue(String.class);
+            Log.d(TAG, time);
+        }
+        else{
+            Toast.makeText(this, "Oh no! We couldn't fetch the current humidity", Toast.LENGTH_LONG).show();
+            continue;
+        }
+
+        totalSensorData.add(new SensorData(humidity, time));
     }
 
     }
