@@ -1,6 +1,7 @@
 package com.example.gamingpc.easyplants;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,39 +27,47 @@ public class sensorOptionActivity extends AppCompatActivity {
     private Button save;
     Switch waterSwitch;
     private boolean switchState;    // Tracks whether or not the switch is active or not
+    private int switchStateInt;
     private EditText changeName;
-    private String displayedName = "Plant Name";
+    private String displayedName;
     private String sensorID;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth;
 
     void setup() {
+        Intent received = getIntent();
+
         // Initialize the auto water switch and set it to water is stored in the firebase
         waterSwitch = findViewById(R.id.switch_autoWater);
-        DatabaseReference waterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
-
-
-        // Initialize text view and get the plant name value to fill it in
-        changeName = findViewById(R.id.text_changeName);
-        DatabaseReference nameRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/PlantName");
-        nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference initialWaterRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/" + sensorID + "/AutoWaterOn");
+        //waterSwitch.setChecked(true);
+        initialWaterRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Called when the data is read or changed in firebase
-                displayedName = dataSnapshot.getValue(String.class);
-                changeName.setText(displayedName);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    switchStateInt = dataSnapshot.getValue(Integer.class);
+                    if (switchStateInt == 0) {
+                        waterSwitch.setChecked(false);
+                    } else {
+                        waterSwitch.setChecked(true);
+                    }
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read name value.", error.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Value was not read
+                Log.w(TAG, "Failed to read autoWater value", error.toException());
             }
         });
 
+        // Fills in the edit text with the current plant name
+        changeName = findViewById(R.id.text_changeName);
+        displayedName = received.getStringExtra("plantName");
+        changeName.setText(displayedName);
 
 
-
+        
         delete = findViewById(R.id.button_deleteData);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
