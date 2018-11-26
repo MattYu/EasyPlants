@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.google.firebase.database.Query;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,7 +192,7 @@ public class sensorListActivity extends AppCompatActivity {
                     plantName.add("Plant Name Undefined");
                 }
                 if (entry.child("MinThreshold").exists()) {
-                    minHumidityThreshold.add(entry.child("MinThreshold").getValue(String.class));
+                    minHumidityThreshold.add(Integer.toString(entry.child("MinThreshold").getValue(Integer.class)));
                 }
                 else{
                     minHumidityThreshold.add("0");
@@ -227,34 +229,59 @@ public class sensorListActivity extends AppCompatActivity {
                         //Compare humidity value with threshold to send a notification to the user only after two minutes
                         if(entry.child("PlantName").exists() && entry.child("Deleted").getValue(Integer.class) == 0 && entry.child("EnableReading").getValue(Integer.class) == 1){
                             if(humidity < entry.child("MinThreshold").getValue(Integer.class)){
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.setTimeInMillis(timestamp.getTime());
 
-                                if(timestamp.after(entry.child("AlertTime").getValue(Timestamp.class)) ){
-                                    calendar.add(Calendar.MINUTE, 2);
-                                    timestamp = new Timestamp(calendar.getTimeInMillis());
-                                    //set the new time for the Alert
-                                    DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
-                                    myRef.setValue(sdf.format(timestamp));
-                                    //send the notification
-                                    notificationCall("Plant " + entry.child("PlantName").getValue() + " needs watering");
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                String nowtime = timestamp.toString();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp.getTime());  //calendar has now value of time
+                                String oldTime = entry.child("AlertTime").getValue(String.class);
+
+                                try {
+
+                                    Date parseNewDate = sdf.parse(nowtime);
+                                    Date parsedDate = sdf.parse(oldTime);
+                                    Date newDate = new Date(parsedDate.getTime() + 12 * 3600* 1000);
+                                    Timestamp oldTimestamp = new Timestamp(parsedDate.getTime());
+                                    if(parseNewDate.getTime() > newDate.getTime() ){
+                                        calendar.add(Calendar.MINUTE, 2);
+                                        timestamp = new Timestamp(calendar.getTimeInMillis());
+                                        //set the new time for the Alert
+                                        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                        myRef.setValue(sdf.format(timestamp));
+                                        //send the notification
+                                        notificationCall("Plant " + entry.child("PlantName").getValue() + " needs watering");
+                                    }
+                                } catch(Exception e) { //this generic but you can control another types of exception
+                                    // look the origin of excption
                                 }
+
+
+
 
                             }
                             if(humidity > entry.child("MaxThreshold").getValue(Integer.class)){
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
                                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                                 Calendar calendar = Calendar.getInstance();
-                                calendar.setTimeInMillis(timestamp.getTime());
-                                calendar.add(Calendar.MINUTE, 2);
-                                timestamp = new Timestamp(calendar.getTimeInMillis());
-                                //set the new time for the Alert
-                                DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
-                                myRef.setValue(sdf.format(timestamp));
-                                //send the notification
-                                notificationCall("Plant " + entry.child("PlantName").getValue() + " has too much water");
+                                calendar.setTimeInMillis(timestamp.getTime());  //calendar has now value of time
+                                String oldTime = entry.child("AlertTime").getValue(String.class);
+
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                                    Date parsedDate = sdf.parse(oldTime);
+                                    Timestamp oldTimestamp = new Timestamp(parsedDate.getTime());
+                                    if(timestamp.after(oldTimestamp)){
+                                        calendar.add(Calendar.MINUTE, 2);
+                                        timestamp = new Timestamp(calendar.getTimeInMillis());
+                                        //set the new time for the Alert
+                                        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                        myRef.setValue(sdf.format(timestamp));
+                                        //send the notification
+                                        notificationCall("Plant " + entry.child("PlantName").getValue() + " has too much water");
+                                    }
+                                } catch(Exception e) { //this generic but you can control nother types of exception
+                                    // look the origin of excption
+                                }
                             }
                         }
 
