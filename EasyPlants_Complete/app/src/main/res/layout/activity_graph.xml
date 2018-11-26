@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,51 +8,64 @@
 
     <Button
         android:id="@+id/refreshGraphButton"
-        android:layout_width="274dp"
-        android:layout_height="48dp"
-        android:text="Refresh Graph"
-        tools:layout_editor_absoluteX="322dp"
-        tools:layout_editor_absoluteY="309dp" />
+        android:layout_width="273dp"
+        android:layout_height="45dp"
+        android:layout_alignBottom="@+id/chart"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="-209dp"
+        android:text="Refresh Graph" />
 
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="313dp"
-        android:layout_weight="1"></lecho.lib.hellocharts.view.LineChartView>
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"></lecho.lib.hellocharts.view.LineChartView>
 
     <View
         android:id="@+id/graphView"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginBottom="8dp"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/darker_gray" />
 
     <lecho.lib.hellocharts.view.PreviewLineChartView
         android:id="@+id/chart_preview"
         android:layout_width="match_parent"
-        android:layout_height="313dp"
-        android:layout_weight="1"></lecho.lib.hellocharts.view.PreviewLineChartView>
+        android:layout_height="150dp"
+        android:layout_alignBottom="@+id/chart"
+        android:layout_marginBottom="-158dp"></lecho.lib.hellocharts.view.PreviewLineChartView>
 
     <Spinner
         android:id="@+id/yearSelector"
         android:layout_width="125dp"
         android:layout_height="44dp"
-        tools:layout_editor_absoluteX="-2dp"
-        tools:layout_editor_absoluteY="311dp" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />
 
     <Spinner
         android:id="@+id/daySelector"
         android:layout_width="94dp"
         android:layout_height="44dp"
-        tools:layout_editor_absoluteX="228dp"
-        tools:layout_editor_absoluteY="313dp" />
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/monthSelector" />
 
     <Spinner
         android:id="@+id/monthSelector"
         android:layout_width="104dp"
         android:layout_height="44dp"
-        tools:layout_editor_absoluteX="124dp"
-        tools:layout_editor_absoluteY="313dp" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="121dp"
+        android:layout_marginLeft="121dp"
+        android:layout_marginBottom="0dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

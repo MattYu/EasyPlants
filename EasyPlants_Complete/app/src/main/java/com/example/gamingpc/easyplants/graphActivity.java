@@ -23,8 +23,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import lecho.lib.hellocharts.gesture.ZoomType;
@@ -53,13 +55,13 @@ public class graphActivity extends AppCompatActivity {
 
     String sensorID;
     FirebaseAuth mAuth;
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    FirebaseDatabase database;
 
-    Spinner yearSelector = (Spinner) findViewById(R.id.yearSelector);
-    Spinner monthSelector = (Spinner) findViewById(R.id.monthSelector);
-    Spinner daySelector = (Spinner) findViewById(R.id.daySelector);
+    Spinner yearSelector;
+    Spinner monthSelector;
+    Spinner daySelector;
 
-    Button refreshGraphButton = (Button) findViewById(R.id.refreshGraphButton);
+    Button refreshGraphButton;
 
     private LineChartView chart;
     private PreviewLineChartView previewChart;
@@ -81,6 +83,9 @@ public class graphActivity extends AppCompatActivity {
     protected void onSetup(){
 
         getPassedData();
+
+        database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         String path = "UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + sensorID + "/SensorData";
 
@@ -106,7 +111,6 @@ public class graphActivity extends AppCompatActivity {
         });
 
         monthSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -171,7 +175,6 @@ public class graphActivity extends AppCompatActivity {
         });
 
         yearSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 currentYear = Integer.valueOf(displayedYears[i]);
@@ -248,14 +251,10 @@ public class graphActivity extends AppCompatActivity {
 
             float lastValue = 0;
 
-            for (int i = 0; i < 86400; ++i) {
-                if(dataSet.get(i).getHour()*3600 + dataSet.get(i).getMinute() * 60 + dataSet.get(i).getSeconds() == i) {
+            for (int i = 0; i < dataSet.size(); ++i) {
                     lastValue = (float)dataSet.get(i).getHumidityValue();
-                            values.add(new PointValue(i, lastValue)); //(x, y)
-                }
-                else{
-                    values.add(new PointValue(i, lastValue));
-                }
+                    int x = dataSet.get(i).getHour()*3600 + dataSet.get(i).getMinute() * 60 + dataSet.get(i).getSeconds();
+                    values.add(new PointValue(x, lastValue)); //(x, y)
             }
 
             Line line = new Line(values);
@@ -325,10 +324,10 @@ public class graphActivity extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void changeDaysList(int year, int month){
-        YearMonth yearMonthObject = YearMonth.of(year, month);
-        int numOfDays = yearMonthObject.lengthOfMonth();
+
+        Calendar mycal = new GregorianCalendar(year, month, currentDay);
+        int numOfDays = mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         setupDay(numOfDays);
     }
@@ -405,11 +404,11 @@ public class graphActivity extends AppCompatActivity {
         }
 
         if(entry.child("Time").exists()){
-            time = entry.child("humidity_value").getValue(String.class);
+            time = entry.child("Time").getValue(String.class);
             Log.d(TAG, time);
         }
         else{
-            Toast.makeText(this, "Oh no! We couldn't fetch the current humidity", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Oh no! We couldn't fetch the data's creation time", Toast.LENGTH_LONG).show();
             continue;
         }
 

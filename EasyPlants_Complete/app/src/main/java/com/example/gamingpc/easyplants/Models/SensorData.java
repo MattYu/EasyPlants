@@ -1,10 +1,14 @@
 package com.example.gamingpc.easyplants.Models;
 
 
+import android.util.Log;
+
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class SensorData implements Comparable<SensorData> {
 
+    final String TAG = "SensorDataModel";
     int humidityValue;
     int year;
     int month;
@@ -16,7 +20,9 @@ public class SensorData implements Comparable<SensorData> {
 
     public SensorData(int humidityValue, String date) {
         this.humidityValue = humidityValue;
-        String[] temp = date.split(".");
+        String[] temp = date.split(Pattern.quote("."));;
+        Log.d(TAG, "Date : " + date);
+        Log.d(TAG, "temp : " + temp[0]);
         this.year = Integer.parseInt(temp[0]);
         this.month = Integer.parseInt(temp[1]);
         this.day = Integer.parseInt(temp[2]);
