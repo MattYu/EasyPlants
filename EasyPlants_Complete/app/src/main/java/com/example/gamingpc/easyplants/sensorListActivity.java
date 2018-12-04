@@ -1,10 +1,20 @@
 package com.example.gamingpc.easyplants;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +37,18 @@ import com.myhexaville.login.LoginActivity;
 import com.google.firebase.database.Query;
 
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
+
+import static android.app.Notification.EXTRA_NOTIFICATION_ID;
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
 
 public class sensorListActivity extends AppCompatActivity {
 
@@ -115,6 +131,7 @@ public class sensorListActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 setSensorList(dataSnapshot);
+
             }
 
             @Override
@@ -161,6 +178,7 @@ public class sensorListActivity extends AppCompatActivity {
         //reset HashMap and Arrays
         //iterate through each user, ignoring their UID
         for (DataSnapshot entry : plantData.getChildren()) {
+
             int deleted = 1;
             if (entry.child("Deleted").exists()) {
                 deleted = entry.child("Deleted").getValue(Integer.class);
@@ -197,35 +215,90 @@ public class sensorListActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         // Sets up the shared preference helper function
-
+                        Integer humidity = 0;
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             if (child.child("humidity_value").exists()) {
+                                humidity = child.child("humidity_value").getValue(Integer.class);
                                 currentHumidityValue.add(Integer.toString(child.child("humidity_value").getValue(Integer.class)));
                             }
                             else{
                                 currentHumidityValue.add("Humidity Unavailable");
                             }
                         }
+
+                        //Compare humidity value with threshold to send a notification to the user only after two minutes
+                        if(entry.child("PlantName").exists() && entry.child("Deleted").getValue(Integer.class) == 0 && entry.child("EnableReading").getValue(Integer.class) == 1){
+                            if(humidity < entry.child("MinThreshold").getValue(Integer.class)){
+
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                String nowtime = timestamp.toString();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp.getTime());  //calendar has now value of time
+                                String oldTime = entry.child("AlertTime").getValue(String.class);
+
+                                try {
+
+                                    Date parseNewDate = sdf.parse(nowtime);
+                                    Date parsedDate = sdf.parse(oldTime);
+                                    Date newDate = new Date(parsedDate.getTime() + 12 * 3600* 1000);
+                                    Timestamp oldTimestamp = new Timestamp(parsedDate.getTime());
+                                    if(parseNewDate.getTime() > newDate.getTime() ){
+                                        calendar.add(Calendar.MINUTE, 2);
+                                        timestamp = new Timestamp(calendar.getTimeInMillis());
+                                        //set the new time for the Alert
+                                        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                        myRef.setValue(sdf.format(timestamp));
+                                        //send the notification
+                                        notificationCall("Plant " + entry.child("PlantName").getValue() + " needs watering");
+                                    }
+                                } catch(Exception e) { //this generic but you can control another types of exception
+                                    // look the origin of excption
+                                }
+
+
+
+
+                            }
+                            if(humidity > entry.child("MaxThreshold").getValue(Integer.class)){
+                                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTimeInMillis(timestamp.getTime());  //calendar has now value of time
+                                String oldTime = entry.child("AlertTime").getValue(String.class);
+
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+                                    Date parsedDate = sdf.parse(oldTime);
+                                    Timestamp oldTimestamp = new Timestamp(parsedDate.getTime());
+                                    if(timestamp.after(oldTimestamp)){
+                                        calendar.add(Calendar.MINUTE, 2);
+                                        timestamp = new Timestamp(calendar.getTimeInMillis());
+                                        //set the new time for the Alert
+                                        DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + entry.getKey() + "/AlertTime");
+                                        myRef.setValue(sdf.format(timestamp));
+                                        //send the notification
+                                        notificationCall("Plant " + entry.child("PlantName").getValue() + " has too much water");
+                                    }
+                                } catch(Exception e) { //this generic but you can control nother types of exception
+                                    // look the origin of excption
+                                }
+                            }
+                        }
+
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Log.d(TAG, "Error while accessing firebase HumidityTest database");
                     }
+
+
                 });
 
             }
             uniqueMp.put(entry.getKey(), true);
 
         }
-
-
-            //Get phone field and append to list
-            //String plantName = (String) entry.child("PlantName").getValue();
-
-            //this.plant.add(plantName);
-            //this.minThreshold.put(plantName, Long.toString((long) entry.child("Minimum Humidity %").getValue()));
-            //this.maxThreshold.put(plantName, Long.toString((long) entry.child("Maximum Humidity %").getValue()));
 
         return;
     }
@@ -237,13 +310,57 @@ public class sensorListActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_sensor_list);
 
+        createNotificationChannel();
         // Enable the back button to the mainActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setup();
+
+    }
+
+    private void notificationCall(String message){
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+
+        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"1")
+                .setSmallIcon(R.drawable.logo_circle)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentTitle("Notification from EasyPlant")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setVisibility(VISIBILITY_PUBLIC)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setOnlyAlertOnce(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, notificationBuilder.build());
+        Log.d(TAG,"NotificationCall");
+
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Notify EasyPlant";
+            String description = "Notification received from EasyPlant";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
 
     protected void refreshData(){
+        Log.w(TAG, "Refresh Data");
         DatabaseReference myRef = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder");
 
         myRef.addValueEventListener(new ValueEventListener() {
@@ -252,6 +369,8 @@ public class sensorListActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 setSensorList(dataSnapshot);
+
+
             }
 
             @Override

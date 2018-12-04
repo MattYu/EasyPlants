@@ -171,7 +171,7 @@ public class setThresholdActivity extends AppCompatActivity {
                 seekBarMin.setProgress(initialMinThres);
                 seekBarMax.setProgress(initialMaxThres);
             }
-        }, 2000);
+        }, 1000);
 
 
 
@@ -279,9 +279,6 @@ public class setThresholdActivity extends AppCompatActivity {
 
 
             seekBarMin.setProgress(initialMinThres);
-
-
-
             seekBarMax.setProgress(initialMaxThres);
 
 

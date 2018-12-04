@@ -93,16 +93,21 @@ public class SignUpFragment extends Fragment implements OnSignUpListener{
                                     DatabaseReference myRef6 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/Deleted");
                                     myRef6.setValue(0);
 
-                                    DatabaseReference myRef7 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/plantName");
+                                    DatabaseReference myRef7 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/PlantName");
                                     myRef7.setValue("Demo Plant");
 
                                     DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() +"/SensorFolder/DemoSensor/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
                                     Map<String, Object> mp = new HashMap<>();
                                     mp.put("humidity_value", 60);
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss dd/MM/YYYY");
                                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                                     mp.put("Time", (sdf.format(timestamp)));
                                     myRef4.setValue(mp);
+
+                                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+
+                                    DatabaseReference myRef9 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/DemoSensor/AlertTime");
+                                    myRef9.setValue(sdf1.format(timestamp));
 
                                 }
                             }

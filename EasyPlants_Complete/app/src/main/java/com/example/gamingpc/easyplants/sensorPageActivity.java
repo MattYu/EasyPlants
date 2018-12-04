@@ -2,6 +2,7 @@ package com.example.gamingpc.easyplants;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -30,9 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.myhexaville.login.LoginActivity;
 import com.ramotion.circlemenu.CircleMenuView;
 
+import static android.support.v4.app.NotificationCompat.VISIBILITY_PUBLIC;
+
 public class sensorPageActivity extends AppCompatActivity {
 
-    private static final String TAG = "sensorListActivity";
+    private static final String TAG = "SensorPageActivity";
 
     // Initialize the UI elements
     private TextView displayPlantName;
@@ -50,6 +53,10 @@ public class sensorPageActivity extends AppCompatActivity {
     private String sensorID;
     private String plantName;
 
+    //Stores the current humidity and threshold
+    private Integer humidity;
+    private Integer minThresh = 0;
+    private Integer maxThresh = 100;
 
 
     // Grabs the data that was passed from the previous intent
@@ -59,8 +66,6 @@ public class sensorPageActivity extends AppCompatActivity {
         plantName = received.getStringExtra("plantName");
 
     }
-
-    //Grabs humidity
 
 
     // Sets up all the ui and data elements for the activity
@@ -88,7 +93,7 @@ public class sensorPageActivity extends AppCompatActivity {
             @Override
             public void onMenuOpenAnimationStart(@NonNull CircleMenuView view) {
                 menuIcon.setText("");
-                Log.d("D", "onMenuOpenAnimationStart");
+                Log.d(TAG, "onMenuOpenAnimationStart");
             }
 
             @Override
@@ -96,7 +101,7 @@ public class sensorPageActivity extends AppCompatActivity {
                 icon1.setText("Set Humidity levels");
                 icon2.setText("Graph");
                 icon3.setText("Settings");
-                Log.d("D", "onMenuOpenAnimationEnd");
+                Log.d(TAG, "onMenuOpenAnimationEnd");
             }
 
             @Override
@@ -105,13 +110,13 @@ public class sensorPageActivity extends AppCompatActivity {
                 icon2.setText("");
                 icon3.setText("");
 
-                Log.d("D", "onMenuCloseAnimationStart");
+                Log.d(TAG, "onMenuCloseAnimationStart");
             }
 
             @Override
             public void onMenuCloseAnimationEnd(@NonNull CircleMenuView view) {
                 menuIcon.setText("menu");
-                Log.d("D", "onMenuCloseAnimationEnd");
+                Log.d(TAG, "onMenuCloseAnimationEnd");
             }
 
             @Override
@@ -119,7 +124,7 @@ public class sensorPageActivity extends AppCompatActivity {
                 icon1.setText("");
                 icon2.setText("");
                 icon3.setText("");
-                Log.d("D", "onButtonClickAnimationStart| index: " + index);
+                Log.d(TAG, "onButtonClickAnimationStart| index: " + index);
             }
 
             @Override
@@ -140,34 +145,28 @@ public class sensorPageActivity extends AppCompatActivity {
                     optionsIntent.putExtra("plantName", plantName);
                     startActivity(optionsIntent);
                 }
-                Log.d("D", "onButtonClickAnimationEnd| index: " + index);
+                Log.d(TAG, "onButtonClickAnimationEnd| index: " + index);
             }
         });
 
 
-
-
-
         //Retrieve humidity value from firebase database
-        //TODO change path of child to read from message_list
-
-
 
         DatabaseReference myCurrentRef = FirebaseDatabase.getInstance().getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + sensorID);
         Query query = myCurrentRef.child("SensorData").orderByKey().limitToLast(1);
         query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Sets up the shared preference helper function
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
 
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     if (child.child("humidity_value").exists()) {
-                        Integer humidity = child.child("humidity_value").getValue(Integer.class);
+                        humidity = child.child("humidity_value").getValue(Integer.class);
                         Log.d(TAG, Integer.toString(humidity));
-
 
                         // Update textview with the humidity
                         displayHumidity.setText(Integer.toString(humidity) + "%");
+
                     }
                     else{
                         Toast.makeText(sensorPageActivity.this, "Oh no! We couldn't fetch the current humidity", Toast.LENGTH_LONG).show();
@@ -176,51 +175,53 @@ public class sensorPageActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG, "Error while accessing firebase HumidityTest database");
             }
         });
+
+        //Retrieve Max Threshold value from
+        Query queryMaxThresh = myCurrentRef.child("MaxThreshold");
+        queryMaxThresh.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                maxThresh = dataSnapshot.getValue(Integer.class);
+                Log.d(TAG,"Max Threshold is " + Integer.toString(maxThresh));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "Error while accessing firebase Maximum Threshold value");
+            }
+        });
+
+        //Retrieve Min Threshold value from
+        Query queryMinThresh = myCurrentRef.child("MinThreshold");
+        queryMinThresh.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                minThresh = dataSnapshot.getValue(Integer.class);
+                Log.d(TAG,"Min Threshold is " + Integer.toString(minThresh));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "Error while accessing firebase Minimum Threshold value");
+            }
+        });
+
     }
 
-    public void notificationCall(String message){
 
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this,"1")
-                .setSmallIcon(R.drawable.plant_test)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setContentTitle("Notification from EasyPlant")
-                .setContentText(message);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, notificationBuilder.build());
-        Log.d(TAG,"NotificationCall");
 
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Notify EasyPlant";
-            String description = "Notification received from EasyPlant";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("1", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_page);
-        createNotificationChannel();
 
         mAuth = FirebaseAuth.getInstance();
 
-        //TODO Create Notification Call when humidity value is under the threshold
-        //TODO Change value on Firebase to enable pump
 
         // Enable the back button to the sensorListActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
