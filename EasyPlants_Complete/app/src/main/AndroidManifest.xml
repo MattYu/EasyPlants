@@ -15,8 +15,7 @@
         android:roundIcon="@drawable/logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
+        <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +25,7 @@
 
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".setThresholdActivity"
             android:parentActivityName=".sensorPageActivity"
             android:alwaysRetainTaskState="true"
@@ -34,7 +34,8 @@
             />
         <activity
             android:name=".cameraActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".VisionActivity"
             android:parentActivityName=".setThresholdActivity"
@@ -57,7 +58,6 @@
         <activity
             android:name=".sensorListActivity"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
             />
         <activity
             android:name=".sensorPageActivity"

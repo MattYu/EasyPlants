@@ -107,13 +107,19 @@ public class SensorRegisterActivity extends AppCompatActivity {
                                                 DatabaseReference myRef4 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/SensorData/-LQv5Qq2f0pUQ2K9TC26/");
                                                 Map<String, Object> mp = new HashMap<>();
                                                 mp.put("humidity_value", 0);
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                                                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss dd/MM/YYYY");
+                                                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
                                                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                                                 mp.put("Time", (sdf.format(timestamp)));
                                                 myRef4.setValue(mp);
 
+                                                DatabaseReference myRef9 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/AlertTime");
+                                                myRef9.setValue(sdf1.format(timestamp));
+
                                                 if (!"null".equals(claimed_or_notClaimed)) {
                                                     Toast.makeText(SensorRegisterActivity.this, "Saved! The key appears to be already claimed... please reset your sensor to pair this sensor", Toast.LENGTH_LONG).show();
+                                                    DatabaseReference myRef8 = database.getReference("UserFolder/" + mAuth.getCurrentUser().getUid() + "/SensorFolder/" + newSensor + "/EnableReading");
+                                                    myRef8.setValue(0);
                                                 }
                                                 else {
                                                     Toast.makeText(SensorRegisterActivity.this, "Successfully registed! Please connect your sensor to the internet to finish pairing", Toast.LENGTH_LONG).show();
