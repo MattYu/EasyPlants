@@ -1,10 +1,34 @@
+/*
+
+User is directed to this activity initially from the main activity
+
+On create:
+Set the notification listener for all sensors
+
+Upon create/resume/refresh:
+Displays a list of active sensors and summary of data
+
+Contains an add new sensor button
+
+On click:
+Redirect to the specific sensor page
+
+UI:
+Contain custom refresh animations
+
+This page has a firebase and auth controller to listen to activity changes specific to the user
+
+
+ */
+
+
+
+
 package com.example.gamingpc.easyplants;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
@@ -14,7 +38,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -174,7 +197,7 @@ public class sensorListActivity extends AppCompatActivity {
 
 
     private void setSensorList(DataSnapshot plantData) {
-
+        //Set the list of sensors
         //reset HashMap and Arrays
         //iterate through each user, ignoring their UID
         for (DataSnapshot entry : plantData.getChildren()) {
@@ -318,7 +341,7 @@ public class sensorListActivity extends AppCompatActivity {
     }
 
     private void notificationCall(String message){
-
+        //Set the notification system
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

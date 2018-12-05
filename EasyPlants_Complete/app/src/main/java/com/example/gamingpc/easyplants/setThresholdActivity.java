@@ -1,3 +1,14 @@
+/*
+
+Allows the user to set the threshold of a sensor and store it into firebase
+
+Contains a slider animation with moving background waves
+
+Recommendation leads to Vision Activity
+
+ */
+
+
 package com.example.gamingpc.easyplants;
 
 import android.content.Intent;
@@ -106,6 +117,7 @@ public class setThresholdActivity extends AppCompatActivity {
 
 
         seekBarMax.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            //Humidity slider bar
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (seekBarMin.getProgress() > seekBarMax.getProgress()) {
@@ -198,7 +210,7 @@ public class setThresholdActivity extends AppCompatActivity {
         recommendation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Intent to cameraActivity");
+                Log.d(TAG, "Intent to VisionActivity");
                 Intent visionIntent = new Intent(setThresholdActivity.this, VisionActivity.class);
                 visionIntent.putExtra("sensorID", sensorID);
                 startActivity(visionIntent);
@@ -284,14 +296,4 @@ public class setThresholdActivity extends AppCompatActivity {
 
     }
 
-    /*
-    // Sends input threshold data to firebase
-    private void toFirebase(String lower, String upper) {
-
-        DatabaseReference refMin = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("min");
-        DatabaseReference refMax = FirebaseDatabase.getInstance().getReference().child("ThresholdValues").child("max");
-        refMin.setValue(lower);
-        refMax.setValue(upper);
-    }
-    */
 }
