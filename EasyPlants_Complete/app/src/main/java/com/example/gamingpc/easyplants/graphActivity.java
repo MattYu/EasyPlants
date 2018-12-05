@@ -102,7 +102,7 @@ public class graphActivity extends AppCompatActivity {
         monthSelector = (Spinner) findViewById(R.id.monthSelector);
         daySelector = (Spinner) findViewById(R.id.daySelector);
 
-        refreshGraphButton = (Button) findViewById(R.id.refreshGraphButton);
+        refreshGraphButton = (Button) findViewById(R.id.refreshButton);
 
         daySelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -223,7 +223,6 @@ public class graphActivity extends AppCompatActivity {
         public void setGraphConfig() {
 
             chart = (LineChartView) findViewById(R.id.chart);
-            previewChart = (PreviewLineChartView) findViewById(R.id.chart_preview);
 
             setDataToGraph();
 
@@ -232,9 +231,6 @@ public class graphActivity extends AppCompatActivity {
             // zoom/scroll is unnecessary.
             chart.setZoomEnabled(false);
             chart.setScrollEnabled(false);
-
-            previewChart.setLineChartData(previewData);
-            previewChart.setViewportChangeListener(new ViewportListener());
 
             previewX(false);
 
@@ -291,20 +287,6 @@ public class graphActivity extends AppCompatActivity {
                 previewChart.setCurrentViewport(tempViewport);
             }
             previewChart.setZoomType(ZoomType.HORIZONTAL);
-        }
-
-        /**
-         * Viewport listener for preview chart(lower one). in {@link #onViewportChanged(Viewport)} method change
-         * viewport of upper chart.
-         */
-        private class ViewportListener implements ViewportChangeListener {
-
-            @Override
-            public void onViewportChanged(Viewport newViewport) {
-                // don't use animation, it is unnecessary when using preview chart.
-                chart.setCurrentViewport(newViewport);
-            }
-
         }
 
 
@@ -371,7 +353,9 @@ public class graphActivity extends AppCompatActivity {
             result[i] = Integer.toBinaryString(years.get(i));
         }
 
-        return result;
+        //return result;
+        String[] temp = {"2018"};
+        return temp;
     }
 
     protected void setupDay(int maxDay){ //Sets the Day dropdown
