@@ -1,3 +1,7 @@
+/*
+Use to animate waves (UI)  
+ */
+
 package com.example.gamingpc.easyplants;
 
 import android.animation.Animator;

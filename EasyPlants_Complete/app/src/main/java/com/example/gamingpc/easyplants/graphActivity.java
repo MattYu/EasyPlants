@@ -1,3 +1,9 @@
+/*
+Activity reserved for a later feature. Currently not in-use.
+
+ */
+
+
 package com.example.gamingpc.easyplants;
 
 import android.support.v7.app.AppCompatActivity;
