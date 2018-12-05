@@ -192,29 +192,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public long insertSensorData(SensorData sensorData){
-        long id = -1;
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
-        contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
-        contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
-
-        try{
-            id = db.insertOrThrow(Config.TABLE_SENSOR_DATA, null, contentValues);
-        }
-        catch(SQLException e){
-            Log.d(TAG, "Exception: " + e.getMessage());
-            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        finally{
-            db.close();
-        }
-
-        return id;
-    }
+//    public long insertSensorData(SensorData sensorData){
+//        long id = -1;
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
+//        contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
+//        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
+//        contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
+//
+//        try{
+//            id = db.insertOrThrow(Config.TABLE_SENSOR_DATA, null, contentValues);
+//        }
+//        catch(SQLException e){
+//            Log.d(TAG, "Exception: " + e.getMessage());
+//            Toast.makeText(context, "Operation failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//        }
+//        finally{
+//            db.close();
+//        }
+//
+//        return id;
+//    }
 
     public long insertUserSensorPairing(SensorLinks link){
         long id = -1;
@@ -661,32 +661,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowCount;
     }
 
-    public long updateSensorData(SensorData sensorData){
-        long rowCount = 0;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
-        contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
-        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
-        contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
-       // contentValues.put(Config.COLUMN_READ_STATUS, sensorData.getReadStatus());
-
-        try{
-            //rowCount = db.update(Config.TABLE_SENSOR_DATA, contentValues,
-                   // Config.COLUMN_DATA_ID + " = " + sensorData.getDataId(),null);
-        }
-        catch(SQLException e){
-            Log.d(TAG, "Exception: " + e.getMessage());
-            Toast.makeText(context, "Operation failed", Toast.LENGTH_LONG).show();
-        }
-        finally{
-            db.close();
-        }
-
-        return rowCount;
-    }
+//    public long updateSensorData(SensorData sensorData){
+//        long rowCount = 0;
+//
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        ContentValues contentValues = new ContentValues();
+//        contentValues.put(Config.COLUMN_SENSOR_ID, sensorData.getSensorId());
+//        contentValues.put(Config.COLUMN_HUMIDITY_VALUE, sensorData.getHumidityValue());
+//        contentValues.put(Config.COLUMN_HUMIDITY_ALERT, sensorData.getSensorSecurityCode());
+//        contentValues.put(Config.COLUMN_DATA_DATE, dateFormat.format(sensorData.getAlertDate()));
+//       // contentValues.put(Config.COLUMN_READ_STATUS, sensorData.getReadStatus());
+//
+//        try{
+//            //rowCount = db.update(Config.TABLE_SENSOR_DATA, contentValues,
+//                   // Config.COLUMN_DATA_ID + " = " + sensorData.getDataId(),null);
+//        }
+//        catch(SQLException e){
+//            Log.d(TAG, "Exception: " + e.getMessage());
+//            Toast.makeText(context, "Operation failed", Toast.LENGTH_LONG).show();
+//        }
+//        finally{
+//            db.close();
+//        }
+//
+//        return rowCount;
+//    }
 
     public long updateSensorLink(SensorLinks sensorLink){
         long rowCount = 0;

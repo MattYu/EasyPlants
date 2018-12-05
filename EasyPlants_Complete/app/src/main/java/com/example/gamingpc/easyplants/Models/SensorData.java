@@ -1,72 +1,36 @@
 package com.example.gamingpc.easyplants.Models;
 
 
+import android.util.Log;
+
 import java.util.Date;
+import java.util.regex.Pattern;
 
-public class SensorData {
+public class SensorData implements Comparable<SensorData> {
 
-    int sensorId;
+    final String TAG = "SensorDataModel";
     int humidityValue;
-    int sensorSecurityCode;
-    int sensorThresholdMax;
-    int sensorThresholdMin;
-    Date alertDate;
+    int year;
+    int month;
+    int day;
+    int hour;
+    int minute;
+    int seconds;
 
 
-    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode, int sensorThresholdMax, int sensorThresholdMin, Date alertDate) {
-        this.sensorId = sensorId;
+    public SensorData(int humidityValue, String date) {
         this.humidityValue = humidityValue;
-        this.sensorSecurityCode = sensorSecurityCode;
-        this.sensorThresholdMax = sensorThresholdMax;
-        this.sensorThresholdMin = sensorThresholdMin;
-        this.alertDate = alertDate;
+        String[] temp = date.split(Pattern.quote("."));;
+        Log.d(TAG, "Date : " + date);
+        Log.d(TAG, "temp : " + temp[0]);
+        this.year = Integer.parseInt(temp[0]);
+        this.month = Integer.parseInt(temp[1]);
+        this.day = Integer.parseInt(temp[2]);
+        this.hour = Integer.parseInt(temp[3]);
+        this.minute = Integer.parseInt(temp[4]);
+        this.seconds = Integer.parseInt(temp[5]);
     }
 
-
-
-    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode, Date alertDate) {
-        //For fetching data
-        this.sensorId = sensorId;
-        this.humidityValue = humidityValue;
-        this.sensorSecurityCode = sensorSecurityCode;
-        this.alertDate = alertDate;
-
-    }
-
-    public SensorData(int sensorId, int humidityValue, int sensorSecurityCode) {
-        //for new SensorData
-
-        this.sensorId = sensorId;
-        this.humidityValue = humidityValue;
-        this.sensorSecurityCode = sensorSecurityCode;
-        this.alertDate = new Date();
-    }
-
-
-    public int getSensorThresholdMax() {
-        return sensorThresholdMax;
-    }
-
-    public void setSensorThresholdMax(int sensorThresholdMax) {
-        this.sensorThresholdMax = sensorThresholdMax;
-    }
-
-    public int getSensorThresholdMin() {
-        return sensorThresholdMin;
-    }
-
-    public void setSensorThresholdMin(int sensorThresholdMin) {
-        this.sensorThresholdMin = sensorThresholdMin;
-    }
-
-
-    public int getSensorId() {
-        return sensorId;
-    }
-
-    public void setSensorId(int sensorId) {
-        this.sensorId = sensorId;
-    }
 
     public int getHumidityValue() {
         return humidityValue;
@@ -76,18 +40,40 @@ public class SensorData {
         this.humidityValue = humidityValue;
     }
 
-    public int getSensorSecurityCode() {
-        return sensorSecurityCode;
+    public int getYear() {
+        return year;
     }
 
-    public void setSensorSecurityCode(int sensorSecurityCode) { this.sensorSecurityCode = sensorSecurityCode;}
-
-    public Date getAlertDate() {
-        return alertDate;
+    public int getMonth() {
+        return month;
     }
 
-    public void setAlertDate(Date alertDate) {
-        this.alertDate = alertDate;
+    public int getDay() {
+        return day;
     }
 
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public int getSeconds() {
+        return seconds;
+    }
+
+    public static boolean isSameDate(SensorData data, int year, int month, int day){
+        return data.year == year && data.month == month && data.day == day;
+    }
+
+    @Override
+    public int compareTo(SensorData data2){
+
+        int secondsA = hour*3600+minute*60+seconds;
+        int secondsB = data2.getHour()*3600 + data2.getMinute()*60 + data2.getSeconds();
+
+        return Integer.compare(secondsA, secondsB);
+    }
 }
