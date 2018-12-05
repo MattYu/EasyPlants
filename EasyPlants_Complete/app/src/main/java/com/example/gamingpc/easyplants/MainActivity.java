@@ -1,3 +1,15 @@
+/*
+Main Page of the application
+
+On create/Resume:
+    Controller FirebaseAuth is used to detect if an user has an authentification token.
+        If yes, wave animation from  com.gelitenight.waveview.library.WaveView (used in accordance to Apache Open source license) begins
+        If no, user is redirected to usermodule library for login/sign in/sign up
+            Firebase Auth is used to automate the signing/signup process
+ */
+
+
+
 package com.example.gamingpc.easyplants;
 
 
@@ -13,16 +25,10 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.myhexaville.login.LoginActivity;
 
 import android.graphics.Color;
 import com.gelitenight.waveview.library.WaveView;
-
-import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {

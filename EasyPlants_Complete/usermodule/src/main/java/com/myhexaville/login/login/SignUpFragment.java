@@ -1,3 +1,8 @@
+/*
+Imported library from myhaxaville.login
+Used in accordance to Apache License with modifications
+ */
+
 package com.myhexaville.login.login;
 
 import android.content.Intent;

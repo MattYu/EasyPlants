@@ -1,3 +1,12 @@
+/*
+Each sensor has a sensor option
+We can change the name of the plants associate with it
+Delete the sensor
+Turn on/off auto watering for said sensor
+
+ */
+
+
 package com.example.gamingpc.easyplants;
 
 import android.content.Intent;

@@ -1,3 +1,12 @@
+/*
+
+This is the sensor page. User are lead to this page by clicking on a sensor on the senorListPage
+It contains real-time humidity data and 2 options: Menu option, leading to sensorOptionActivity, and set threshold option, leading to setThresholdActivity
+This page has a firebase and auth controller to listen to activity changes specific to the user
+
+ */
+
+
 package com.example.gamingpc.easyplants;
 
 import android.app.NotificationChannel;

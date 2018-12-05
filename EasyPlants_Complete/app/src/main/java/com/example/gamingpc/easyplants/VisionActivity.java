@@ -12,6 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ *
+ * Google vision combined with our custom plant database
+ *
+ * Used to identify a plant type and fetch its recommended humidity level
  */
 
 package com.example.gamingpc.easyplants;
