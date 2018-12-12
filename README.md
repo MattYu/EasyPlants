@@ -2,7 +2,7 @@
 Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors + Water pump.
 
 # App Highlight
-This app waters your plants. 
+### This app waters your plants for you!
 
 The user takes a picture of a plant and the app figures out what type of plants you have and how much water it needs:
 
