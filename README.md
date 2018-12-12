@@ -1,5 +1,7 @@
 # EasyPlants
-Ongoing Android Project using Azure, Humidity Sensors and Image Processing API 
+Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors.
+
+# Logging Page
 
 ![Imgur](https://i.imgur.com/nh0wp2t.gif)
 
