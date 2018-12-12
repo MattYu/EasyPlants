@@ -17,3 +17,5 @@ The user takes a picture of a plant and the app figures out what type of plants 
 ## Step 2: Add a sensor
 
 ![Imgur](https://i.imgur.com/9IZJcst.gif)
+
+We'll post a link on how to configure your own arduino into a sensor soon 
