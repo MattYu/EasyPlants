@@ -1,9 +1,13 @@
 # EasyPlants
 Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors.
 
-# Logging Page
+# Here's how it works: 
+## Log in 
 
 ![Imgur](https://i.imgur.com/nh0wp2t.gif)
+
+# Let our app figure out what's best for your plants
+![Imgur](https://i.imgur.com/KblHKoP.gifv)
 
 # How to use git
 https://www.git-tower.com/blog/git-cheat-sheet
