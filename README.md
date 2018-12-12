@@ -7,7 +7,7 @@ Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensor
 ![Imgur](https://i.imgur.com/nh0wp2t.gif)
 
 # Let our app figure out what's best for your plants
-![Imgur](https://i.imgur.com/KblHKoP.gifv)
+![Imgur](https://i.imgur.com/KblHKoP.gif)
 
 # How to use git
 https://www.git-tower.com/blog/git-cheat-sheet
