@@ -1,7 +1,7 @@
 # EasyPlants
 Ongoing Android Project using Azure, Humidity Sensors and Image Processing API 
 
-![Imgur](https://i.imgur.com/nh0wp2t.gifv)
+![Imgur](https://i.imgur.com/nh0wp2t.gif)
 
 # How to use git
 https://www.git-tower.com/blog/git-cheat-sheet
