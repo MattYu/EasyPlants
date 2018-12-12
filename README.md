@@ -2,7 +2,7 @@
 Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors.
 
 # App Highlight
-#### The app recognizes your plants, knows how much humidity it needs and waters it when needed: 
+#### The app recognizes your plants, knows how much humidity it needs and waters it when needed! 
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
 
 # Here's how it works: 
