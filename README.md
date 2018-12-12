@@ -1,11 +1,11 @@
 # EasyPlants
 Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors.
 
-## Let our app figure out what's best for your plants
+# App Highlight: The app recognizes your plants, knows how much humidity it needs and waters it when needed. 
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
 
 # Here's how it works: 
-## Log in 
+## Step 1: Log in 
 
 ![Imgur](https://i.imgur.com/nh0wp2t.gif)
 
