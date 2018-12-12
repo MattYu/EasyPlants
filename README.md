@@ -27,3 +27,7 @@ The user takes a picture of a plant and the app figures out what type of plants 
 Note that the App receive data in real-time from the sensor anywhere in the world as long as you have access to the internet 
 
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
+
+![Imgur](https://i.imgur.com/K80WuG1.gif)
+
+## Step 4: Done, your plant will now be watered and you will be notified when it needs watering! 
