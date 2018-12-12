@@ -24,7 +24,7 @@ The user takes a picture of a plant and the app figures out what type of plants 
 ##### Part 1/3
 ![Imgur](https://i.imgur.com/uthulbY.gif)
 
-Note that the App receive data in real-time from the sensor anywhere in the world as long as you have access to the internet 
+Note that the App receives data in real-time from the sensors anywhere in the world as long as you have access to the internet 
 ##### Part 2/3
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
 ##### Part 3/3
