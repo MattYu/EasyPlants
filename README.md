@@ -23,6 +23,7 @@ The user takes a picture of a plant and the app figures out what type of plants 
 ## Step 3: Configure the sensor for your plant
 
 ![Imgur](https://i.imgur.com/RbVmmQF.gif)
+
 Note that the App receive data in real-time from the sensor anywhere in the world as long as you have access to the internet 
 
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
