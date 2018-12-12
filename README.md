@@ -21,13 +21,13 @@ The user takes a picture of a plant and the app figures out what type of plants 
 (We'll post a link on how to configure your own arduino into a sensor soon)
 
 ## Step 3: Configure the sensor for your plant
-
+##### Part 1/3
 ![Imgur](https://i.imgur.com/uthulbY.gif)
 
 Note that the App receive data in real-time from the sensor anywhere in the world as long as you have access to the internet 
-
+##### Part 2/3
 ![Imgur](https://i.imgur.com/KblHKoP.gif)
-
+##### Part 3/3
 ![Imgur](https://i.imgur.com/K80WuG1.gif)
 
 ## Step 4: Done, your plant will now be watered and you will be notified when it needs watering! 
