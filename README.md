@@ -1,5 +1,5 @@
 # EasyPlants
-Android Project using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors + Water pump.
+An Android app using Firebase, Google Vision API & Arduino Wifi-Humidity Sensors + Water pump to water plants and receive data in real-time.
 
 # App Highlight
 ### This app waters your plants for you!
